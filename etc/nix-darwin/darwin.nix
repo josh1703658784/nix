@@ -1,4 +1,4 @@
- {config, pkgs, ... }:
+ {username, config, pkgs, ... }:
 
 # NIX-DARWIN CONFIG OPTIONS
 # https://daiderd.com/nix-darwin/manual/index.html
@@ -9,25 +9,42 @@
 
 
 
+  # users.users.josh.home
+  # home-manager.users.josh.home.homeDirectory = /Users/josh;
+users.users = {
+  "${username}" = {
+    home = "/Users/${username}";
+  };
+};
 
-  # nixpkgs = {
-  #   overlays = [
-  #     inputs.brew-nix.overlays.default
-  #   ];
-  # };
 
+programs.nixvim.enable = true;
+programs.nixvim = {
+  viAlias = true;
+  vimAlias = true;
+  colorschemes.dracula-nvim.enable = true;
+  # colorschemes.dracula-nvim.autoLoad = true;
+  plugins.lualine.enable = true;
+  extraConfigVim = ''
+    set number relativenumber
+  '';
+};
 
 brew-nix.enable = true;
 environment.systemPackages = with pkgs; [
+  pkgs.git
+
   brewCasks.appcleaner
   brewCasks.arq
   brewCasks.boop
   brewCasks.coteditor
   brewCasks.devonthink
+  brewCasks.dhs
   brewCasks.exactscan
   brewCasks.firefox
   brewCasks.fork
   brewCasks.hazel
+  brewCasks.iina
   brewCasks.iterm2
   brewCasks.kextviewr
   brewCasks.knockknock
@@ -44,24 +61,27 @@ environment.systemPackages = with pkgs; [
   brewCasks.syncthing
   brewCasks.textual
   brewCasks.xld
-  
-  #brewCasks.alfred
-  #brewCasks.blockblock
-  #brewCasks.busycal
-  #brewCasks.cocoapacketanalyzer
-  #brewCasks.dhs
-  #brewCasks.hiddenbar
-  #brewCasks.iina
-  #brewCasks.imageoptim
-  #brewCasks.neo-network-utility
-  #brewCasks.photosweeper
-  #brewCasks.powerphotos
-  #brewCasks.qbittorrent
-  #brewCasks.reikey
-  #brewCasks.sf-symbols
-  #brewCasks.tor-browser
-  #brewCasks.yubico-yubikey-manager
-  
+
+  # brewCasks.alfred
+  # brewCasks.blockblock
+  # brewCasks.busycal
+  # brewCasks.cocoapacketanalyzer
+  # brewCasks.hiddenbar
+  # brewCasks.imageoptim
+  # brewCasks.neo-network-utility
+  # brewCasks.photosweeper
+  # brewCasks.qbittorrent
+  # brewCasks.reikey
+  # brewCasks.sf-symbols
+  # brewCasks.tor-browser
+  # brewCasks.yubico-yubikey-manager
+
+  (brewCasks.powerphotos.overrideAttrs (o: {
+    src = pkgs.fetchurl {
+      url = builtins.head o.src.urls;
+      hash = "sha256-YqCtMiim1B48XzKJcnJ5yUI7qVUquY6FTltF+Jf6Y/A=";
+    };
+  }))
   (brewCasks.suspicious-package.overrideAttrs (o: {
     src = pkgs.fetchurl {
       url = builtins.head o.src.urls;
@@ -70,12 +90,12 @@ environment.systemPackages = with pkgs; [
   }))
   #brewCasks.
 
-  #(brewCasks.PACKAGE.overrideAttrs (o: {
-  #    src = pkgs.fetchurl {
-  #      url = builtins.head o.src.urls;
-  #      hash = lib.fakeHash; # Replace me with real hash after building once
-  #    };
-  #  }))
+  # (brewCasks.PACKAGE.overrideAttrs (o: {
+  #   src = pkgs.fetchurl {
+  #     url = builtins.head o.src.urls;
+  #     hash = lib.fakeHash; # Replace me with real hash after building once
+  #   };
+  # }))
 ];
 
 #
