@@ -13,6 +13,13 @@
 
 # pkgs.brewCasks.busycal = newbusycal;
 
+programs.nixvim.enable = true;
+# programs.tmux.enable = true;
+
+programs.tmux = {
+  enableMouse = true;
+  enableVim = true;
+};
 
 users.users = {
   "${username}" = {
@@ -20,14 +27,6 @@ users.users = {
   };
 };
 
-fonts.packages = with pkgs; [
-  nerdfonts
-  inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
-];
-
-
-
-programs.nixvim.enable = true;
 programs.nixvim = {
   viAlias = true;
   vimAlias = true;
@@ -53,6 +52,7 @@ environment.systemPackages = with pkgs; [
   pkgs.signal-desktop
   pkgs.syncthing
   pkgs.xld
+  # pkgs.darwin.xcode
 
 
   # brewCasks gui

@@ -50,12 +50,10 @@
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#admins-MacBook-Pro
     darwinConfigurations."${hostname}" = nix-darwin.lib.darwinSystem {
-      # inherit system inputs;
-      specialArgs = {
-        username = "${username}";
+      specialArgs = { # nix-darwin
+        username = username;
         inputs = inputs;
       };
-        # fonts.packages = with pkgs; [ nerdfonts ];
       modules = [
         ./configuration.nix
         mac-app-util.darwinModules.default
@@ -68,11 +66,13 @@
         # nixvim.homeManagerModules.nixvim
         home-manager.darwinModules.home-manager
         {
-          # nixpkgs = nixpkgs;
-          # home-manager.extraSpecialArgs = { inherit inputs; };
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users."${username}" = import ./home.nix;
+          home-manager.extraSpecialArgs = {
+            username = username;
+            inputs = inputs;
+          };
         }
       ];
     };
