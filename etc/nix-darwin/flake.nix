@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
+    mac-app-util.url = "github:hraban/mac-app-util";
+    apple-fonts.url = "github:Lyndeno/apple-fonts.nix";
 
     nix-darwin = {
       url = "github:LnL7/nix-darwin/nix-darwin-24.11";
@@ -24,6 +26,7 @@
       url = "github:nix-community/nixvim/nixos-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
   };
 
   outputs = inputs@{
@@ -34,6 +37,8 @@
     , brew-api
     , home-manager
     , nixvim
+    , mac-app-util
+    , apple-fonts
     , ...
   }:
   let
@@ -48,10 +53,14 @@
       # inherit system inputs;
       specialArgs = {
         username = "${username}";
+        inputs = inputs;
       };
+        # fonts.packages = with pkgs; [ nerdfonts ];
       modules = [
         ./configuration.nix
+        mac-app-util.darwinModules.default
 
+        # mac-app-util.darwinModules.default
         brew-nix.darwinModules.default
         nixvim.nixDarwinModules.nixvim
         ./darwin.nix

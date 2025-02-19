@@ -42,7 +42,7 @@ function error {
 function enforce_meta_perms {
   info 'fixing/setting permissions on this script'
   sudo chown "${RUN_AS_USER}:${RUN_AS_GROUP}" "${THIS_SCRIPT}"
-  sudo chmod 700 "${THIS_SCRIPT}"
+  sudo chmod 740 "${THIS_SCRIPT}"
 }
 
 function cleanup {

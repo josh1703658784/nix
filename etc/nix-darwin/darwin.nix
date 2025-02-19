@@ -1,21 +1,30 @@
- {username, config, pkgs, ... }:
+ { inputs, username, config, pkgs, ... }:
+
+# NIX PACKAGES SEARCH
+# https://search.nixos.org
 
 # NIX-DARWIN CONFIG OPTIONS
 # https://daiderd.com/nix-darwin/manual/index.html
 
 # HOMEBREW CASK SEARCH
 # https://formulae.brew.sh/cask/nova#default
+
 {
 
+# pkgs.brewCasks.busycal = newbusycal;
 
 
-  # users.users.josh.home
-  # home-manager.users.josh.home.homeDirectory = /Users/josh;
 users.users = {
   "${username}" = {
     home = "/Users/${username}";
   };
 };
+
+fonts.packages = with pkgs; [
+  nerdfonts
+  inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
+];
+
 
 
 programs.nixvim.enable = true;
@@ -23,7 +32,6 @@ programs.nixvim = {
   viAlias = true;
   vimAlias = true;
   colorschemes.dracula-nvim.enable = true;
-  # colorschemes.dracula-nvim.autoLoad = true;
   plugins.lualine.enable = true;
   extraConfigVim = ''
     set number relativenumber
@@ -32,11 +40,25 @@ programs.nixvim = {
 
 brew-nix.enable = true;
 environment.systemPackages = with pkgs; [
+  # cli
   pkgs.git
+  pkgs.mas
 
-  brewCasks.appcleaner
+  # nixpkgs gui
+  pkgs.iterm2
+  pkgs.appcleaner
+  pkgs.iina
+  pkgs.net-news-wire
+  pkgs.qbittorrent
+  pkgs.signal-desktop
+  pkgs.syncthing
+  pkgs.xld
+
+
+  # brewCasks gui
   brewCasks.arq
   brewCasks.boop
+  # brewCasks.cocoapacketanalyzer
   brewCasks.coteditor
   brewCasks.devonthink
   brewCasks.dhs
@@ -44,38 +66,56 @@ environment.systemPackages = with pkgs; [
   brewCasks.firefox
   brewCasks.fork
   brewCasks.hazel
-  brewCasks.iina
-  brewCasks.iterm2
   brewCasks.kextviewr
   brewCasks.knockknock
-  brewCasks.little-snitch
+  # brewCasks.little-snitch           # ! requires /Applications location
   brewCasks.marta
   brewCasks.meta
-  brewCasks.netnewswire
   brewCasks.nova
   brewCasks.orbstack
   brewCasks.orion
-  brewCasks.signal
   brewCasks.steermouse
-  brewCasks.swinsian
-  brewCasks.syncthing
+  # brewCasks.swinsian                # ! can't update to beta
   brewCasks.textual
-  brewCasks.xld
+  #brewCasks.
 
-  # brewCasks.alfred
-  # brewCasks.blockblock
-  # brewCasks.busycal
-  # brewCasks.cocoapacketanalyzer
+  # brewCasks.blockblock              # ! install required
+  # brewCasks.busycal                 # ! weird collisions
   # brewCasks.hiddenbar
   # brewCasks.imageoptim
-  # brewCasks.neo-network-utility
-  # brewCasks.photosweeper
-  # brewCasks.qbittorrent
-  # brewCasks.reikey
-  # brewCasks.sf-symbols
+  # brewCasks.neo-network-utility     # ! cannot undmg non-hfs
+  # brewCasks.photosweeper-x
+  # brewCasks.reikey                  # ! install required
+  # brewCasks.sf-symbols              # ! install required
   # brewCasks.tor-browser
-  # brewCasks.yubico-yubikey-manager
+  # brewCasks.yubico-yubikey-manager  # ! install required
 
+  # overrides
+  # (brewCasks.busycal.overrideAttrs (o: {
+  #   unpackPhase = "undmg $src";
+  #   src = pkgs.fetchurl {
+  #     url = (builtins.replaceStrings [".zip"] [".dmg" ] o.src.url);
+  #     sha256 = "sha256-4reNiGyU2Woc+4OIVhQexVZYqdPeyg3Ff3qtkA8ZE4E=";
+  #   };
+  # }))
+  (brewCasks.alfred.overrideAttrs (o: {
+    nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.gnutar ];
+    unpackPhase = "tar -xvzf $src";
+  }))
+  (brewCasks.imageoptim.overrideAttrs (o: {
+    nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.gnutar ];
+    unpackPhase = "tar -xvf $src";
+  }))
+  # (brewCasks.neo-network-utility.overrideAttrs (o: {
+  #   nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.gnutar ];
+  #   unpackPhase = ''
+  #   unzip -c "''${src}"
+  #   dmgsrc="$(echo "''${src}" | sed 's/\.zip$//g')"
+  #   undmg "''${dmgsrc}"
+  #   # echo
+  #   '';
+  #   # url = (builtins.replaceStrings [".zip"] [""] o.src.url);
+  # }))
   (brewCasks.powerphotos.overrideAttrs (o: {
     src = pkgs.fetchurl {
       url = builtins.head o.src.urls;
@@ -88,7 +128,6 @@ environment.systemPackages = with pkgs; [
       hash = "sha256-//iL7BRdox+KA1CJnGttUQiUfskuBeMGrf1YUNt/m90=";
     };
   }))
-  #brewCasks.
 
   # (brewCasks.PACKAGE.overrideAttrs (o: {
   #   src = pkgs.fetchurl {
@@ -232,7 +271,7 @@ system.defaults.NSGlobalDomain = {
 system.defaults.finder = {
   AppleShowAllExtensions          = true;     # show file extensions
   AppleShowAllFiles               = true;     #  show hidden files
-  CreateDesktop                   = false;    # show icons on the desktop
+  CreateDesktop                   = true;    # show icons on the desktop
   FXDefaultSearchScope            = "SCcf";   # SCcf = current dir; default search scope
   FXEnableExtensionChangeWarning  = false;    # show warnings when changing a file extension
   FXPreferredViewStyle            = "clmv";   # clmv = column view; default finder view
@@ -244,7 +283,7 @@ system.defaults.finder = {
   ShowMountedServersOnDesktop     = false;    # show connected servers on desktop
   ShowPathbar                     = true;     # show path breadcrumbs in finder
   ShowRemovableMediaOnDesktop     = false;    # show removable media (CDs...) on desktop
-  ShowStatusBar                   = true;     # show status bar at bottom of finder windows
+  ShowStatusBar                   = false;    # show status bar at bottom of finder windows
   _FXShowPosixPathInTitle         = false;    # show the full POSIX filepath in the window title
   _FXSortFoldersFirst             = true;     # keep folders on top when sorting by name
 };
