@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR="$(dirname "$(realpath $0)" )"; readonly SCRIPT_DIR
+SCRIPT_DIR="$( dirname "$(realpath "${0}")" )"; readonly SCRIPT_DIR
 
 function _log {
-  echo "LOG | ${@}"
+  echo "LOG | ${*}"
 }
 
 function info {
-  _log "INFO: ${@}"
+  _log "INFO: ${*}"
 }
 
 clear

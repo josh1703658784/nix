@@ -1,13 +1,26 @@
- { inputs, username, config, pkgs, ... }:
-
 # NIX PACKAGES SEARCH
 # https://search.nixos.org
 
 # NIX-DARWIN CONFIG OPTIONS
 # https://daiderd.com/nix-darwin/manual/index.html
 
+# VARIOUS OPTIONS
+# https://mynixos.com/options
+
 # HOMEBREW CASK SEARCH
 # https://formulae.brew.sh/cask/nova#default
+
+{
+    inputs
+  , config
+  , pkgs
+  , username
+  , user-home-dir
+  , homebrew-prefix
+  , nix-homebrew
+  , homebrew-volume
+  , ...
+}:
 
 {
 
@@ -16,6 +29,29 @@
 programs.nixvim.enable = true;
 # programs.tmux.enable = true;
 
+
+nix-homebrew = {
+  #@todo don't install at default location
+  enable = true;
+  mutableTaps = false;
+  enableRosetta = false;
+  taps = { "homebrew/homebrew-cask" = inputs.homebrew-cask; };
+  user = username;
+  prefixes = {
+    "${homebrew-prefix}" = {
+      enable = true;
+      library = "${homebrew-prefix}/Library";
+      taps = {
+        # "homebrew/homebrew-core" = inputs.homebrew-core;
+        "homebrew/homebrew-cask" = inputs.homebrew-cask;
+        "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
+      };
+    };
+  };
+};
+
+
+
 programs.tmux = {
   enableMouse = true;
   enableVim = true;
@@ -23,9 +59,93 @@ programs.tmux = {
 
 users.users = {
   "${username}" = {
-    home = "/Users/${username}";
+    home = user-home-dir;
   };
 };
+#
+homebrew.enable = true;
+homebrew = {
+  brewPrefix              = "${homebrew-prefix}/bin";
+  caskArgs.appdir         = "${homebrew-volume}/Applications"; #/nix-homebrew";
+  caskArgs.no_binaries    = true;
+  caskArgs.no_quarantine  = false;
+  caskArgs.require_sha    = true;
+  global.autoUpdate       = false;
+  onActivation.autoUpdate = false;
+  onActivation.cleanup    = "uninstall"; # set 'zap' global and uninstall per 'app'?
+  onActivation.upgrade    = false;
+
+  # https://daiderd.com/nix-darwin/manual/index.html#opt-homebrew.casks
+  casks = [
+    "blockblock"
+    "boop"
+    "busycal"
+    "coteditor"
+    "firefox"
+    "hiddenbar"
+    "neo-network-utility"
+    "reikey"
+    "sf-symbols"
+    # "swinsian"
+    "tailscale"
+    "thingsmacsandboxhelper"
+    "tor-browser"
+    "yubico-yubikey-manager"
+    {
+      name = "little-snitch";
+      args = { appdir = "/Applications"; };
+    }
+    {
+      name = "steermouse";
+      args = { appdir = "/Applications"; };
+    }
+    # {
+    #   name = "swinsian";
+    #   args = { appdir = "/Applications"; };
+    #   # args = { appdir = "${user-home-dir}/Applications/Nix Applications"; };
+    # }
+  ];
+  masApps = {
+    # "1blocker" = 1365531024;
+    # actions = 1586435171
+    # amphetamine = 937984704
+    # anybox = 1593408455
+    # bear = 1091189122
+    # controllerforhomekit = 1198176727
+    # dark reader for safari = 1438243180
+    # data jar = 1453273600
+    # infuse = 1136220934
+    # kagi for safari = 1622835804
+    # logger = 1479321094
+    # mapper = 1589391989
+    # micro snitch = 972028355
+    # monodraw = 920404675
+    # musicbox = 1614730313
+    # musicharbor = 1440405750
+    # noir = 1592917505
+    # number = 409203825
+    # ok json = 1576121509
+    # pages = 409201541
+    # parcel = 639968404
+    # photomator = 1444636541
+    # pixelmator pro = 1289583905
+    # pushover
+    # redirect web for safari = 1571283503
+    # regexp
+    # rippple = 1309894528
+    # soulver 3 = 1508732804
+    # stopthefonts = 1671452642
+    # stopthemadness pro = -2118554294
+    # strongbox = 1481853033
+    # surfed = 1591590700
+    # things = 904280696
+    # utm = 1538878817
+    # wifi explorer = 494803304
+
+  };
+};
+
+#environment.variables.EDITOR = "nvim";
 
 programs.nixvim = {
   viAlias = true;
@@ -34,6 +154,10 @@ programs.nixvim = {
   plugins.lualine.enable = true;
   extraConfigVim = ''
     set number relativenumber
+    set tabstop=2
+    set shiftwidth=2
+    set softtabstop=2
+    set expandtab
   '';
 };
 
@@ -42,6 +166,7 @@ environment.systemPackages = with pkgs; [
   # cli
   pkgs.git
   pkgs.mas
+  pkgs.yadm
 
   # nixpkgs gui
   pkgs.iterm2
@@ -53,8 +178,11 @@ environment.systemPackages = with pkgs; [
   pkgs.syncthing
   pkgs.xld
   # pkgs.darwin.xcode
+  pkgs.apple-sdk
+  apple-sdk_15
+  # pkgs.darwin.xcode
 
-
+#
   # brewCasks gui
   brewCasks.arq
   brewCasks.boop
@@ -68,13 +196,13 @@ environment.systemPackages = with pkgs; [
   brewCasks.hazel
   brewCasks.kextviewr
   brewCasks.knockknock
-  # brewCasks.little-snitch           # ! requires /Applications location
+  # brewCasks.little-snitch           # ! /Applications required
   brewCasks.marta
   brewCasks.meta
   brewCasks.nova
   brewCasks.orbstack
   brewCasks.orion
-  brewCasks.steermouse
+  # brewCasks.steermouse              # ! /Applications required
   # brewCasks.swinsian                # ! can't update to beta
   brewCasks.textual
   #brewCasks.
@@ -82,7 +210,6 @@ environment.systemPackages = with pkgs; [
   # brewCasks.blockblock              # ! install required
   # brewCasks.busycal                 # ! weird collisions
   # brewCasks.hiddenbar
-  # brewCasks.imageoptim
   # brewCasks.neo-network-utility     # ! cannot undmg non-hfs
   # brewCasks.photosweeper-x
   # brewCasks.reikey                  # ! install required
@@ -92,11 +219,12 @@ environment.systemPackages = with pkgs; [
 
   # overrides
   # (brewCasks.busycal.overrideAttrs (o: {
-  #   unpackPhase = "undmg $src";
   #   src = pkgs.fetchurl {
   #     url = (builtins.replaceStrings [".zip"] [".dmg" ] o.src.url);
-  #     sha256 = "sha256-4reNiGyU2Woc+4OIVhQexVZYqdPeyg3Ff3qtkA8ZE4E=";
+  #     # sha256 = "sha256-4reNiGyU2Woc+4OIVhQexVZYqdPeyg3Ff3qtkA8ZE4E=";
+  #     hash = "sha256-4reNiGyU2Woc+4OIVhQexVZYqdPeyg3Ff3qtkA8ZE4E=";
   #   };
+  #   unpackPhase = "undmg $src";
   # }))
   (brewCasks.alfred.overrideAttrs (o: {
     nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.gnutar ];

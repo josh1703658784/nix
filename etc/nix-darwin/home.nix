@@ -5,8 +5,13 @@
 # NIX PACKAGES SEARCH
 # https://search.nixos.org
 
-# { lib, config, pkgs, modulesPath, ... }:
-{ inputs, username, config, pkgs, ...}:
+{
+    inputs
+  , config
+  , pkgs
+  , user-data-volume
+  , ...
+}:
 
 {
   fonts.fontconfig.enable      = true;
@@ -20,23 +25,25 @@
   # programs.ssh.enable = true;
 
   home.file = {
-    _Databases.source = config.lib.file.mkOutOfStoreSymlink "/Volumes/${username}-data/Databases";
-    _Developer.source = config.lib.file.mkOutOfStoreSymlink "/Volumes/${username}-data/Developer";
-    _Documents.source = config.lib.file.mkOutOfStoreSymlink "/Volumes/${username}-data/Documents";
-    _HOME.source      = config.lib.file.mkOutOfStoreSymlink "/Volumes/${username}-data";
-    _Music.source     = config.lib.file.mkOutOfStoreSymlink "/Volumes/${username}-data/Music";
-    _Pictures.source  = config.lib.file.mkOutOfStoreSymlink "/Volumes/${username}-data/Pictures";
-    _Sync.source      = config.lib.file.mkOutOfStoreSymlink "/Volumes/${username}-data/Sync";
-    # _bin.source = config.lib.file.mkOutOfStoreSymlink "/Volumes/josh-data";
-    # _etc.source = config.lib.file.mkOutOfStoreSymlink "/Volumes/josh-data";
-    # _opt.source = config.lib.file.mkOutOfStoreSymlink "/Volumes/josh-data";
-    # _tmp.source = config.lib.file.mkOutOfStoreSymlink "/Volumes/josh-data";
+    _Databases.source = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/Databases";
+    _Developer.source = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/Developer";
+    _Documents.source = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/Documents";
+    _HOME.source      = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}";
+    _Music.source     = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/Music";
+    _Pictures.source  = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/Pictures";
+    _Sync.source      = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/Sync";
+    _bin.source       = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/bin";
+    _etc.source       = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/etc";
+    _opt.source       = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/opt";
+    # _tmp.source = config.lib.file.mkOutOfStoreSymlink "/Volumes/josh-data/tmp";
   };
 
   home.packages = with pkgs; [
     zsh-powerlevel10k
     bat
     git
+    shellcheck
+    yadm # dotfile manager
 
     # FONTS
     nerdfonts
@@ -153,55 +160,8 @@
       # dcu   = "docker compose up -d";
       # dcul  = "docker-compose-up-d-log-colorize";
     };
-    initExtra = ''
-      nova(){
-        readonly REAL="$(readlink '/Applications/Nix Apps/Nova.app' )"
-        readonly BIN="''${REAL}/Contents/SharedSupport/nova"
-        "''${BIN}" ''${@}
-      }
+    initExtra = builtins.readFile ./external-configs/zsh-shell-functions/functions.sh;
 
-      docker-compose-up-d-log-colorize(){
-        local -r args="''${@}"
-        docker compose up -d "''${args}"
-        docker compose logs -f "''${args}" | tspin -f
-      }
-
-      docker-compose-inspect(){
-        local -r service="''${1}"
-        docker inspect "$(docker-compose ps -a "''${service}" | awk '{ print $1 }' | tail -n 1)"
-      }
-
-      docker-compose-log-colorize(){
-        docker compose logs -f "''${@}" | tspin -f
-      }
-
-      # # expand aliases to full command
-      # function expand-alias() {
-      #     zle _expand_alias
-      #     zle self-insert
-      # }
-      # zle -N expand-alias
-      # bindkey -M main ' ' expand-alias
-
-      n() {
-        [ "''${NNNLVL:-0}" -eq 0 ] || {
-          echo 'nnn is already running'
-          return
-        }
-        # w/ export will *always* cd on quit
-        local -r nnnTmpfile="''${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
-
-        # The command builtin allows one to alias nnn to n, if desired, without
-        # making an infinitely recursive alias
-        command nnn "''${@}"
-
-        [ ! -f "''${nnnTmpfile}" ] || {
-          # shellcheck source=/dev/null
-          . "''${nnnTmpfile}"
-          rm -f -- "''${nnnTmpfile}" > '/dev/null'
-        }
-      }
-    '';
   };
 
   # system.stateVersion = "24.11";
