@@ -100,15 +100,44 @@ homebrew = {
       args = { appdir = "/Applications"; };
     }
     # {
+    #   name = "arq";
+    #   args = { appdir = "/Applications"; };
+    # }
+    "iterm2"
+    "appcleaner"
+    "iina"
+    "netnewswire"
+    "qbittorrent"
+    "signal"
+    "syncthing"
+    "xld"
+    # "arq"
+    "boop"
+    "coteditor"
+    "devonthink"
+    "dhs"
+    "exactscan"
+    "firefox"
+    "fork"
+    "hazel"
+    "kextviewr"
+    "knockknock"
+    "meta"
+    "marta"
+    "nova"
+    "orbstack"
+    "orion"
+    "textual"
+    # {
     #   name = "swinsian";
     #   args = { appdir = "/Applications"; };
     #   # args = { appdir = "${user-home-dir}/Applications/Nix Applications"; };
     # }
   ];
-  masApps = {
+  # masApps = {
     # "1blocker" = 1365531024;
     # actions = 1586435171
-    # amphetamine = 937984704
+    # amphetamine = 937984704;
     # anybox = 1593408455
     # bear = 1091189122
     # controllerforhomekit = 1198176727
@@ -142,7 +171,7 @@ homebrew = {
     # utm = 1538878817
     # wifi explorer = 494803304
 
-  };
+  # };
 };
 
 #environment.variables.EDITOR = "nvim";
@@ -167,9 +196,10 @@ environment.systemPackages = with pkgs; [
   pkgs.git
   pkgs.mas
   pkgs.yadm
+  pkgs.gtrash # trash
 
   # nixpkgs gui
-  pkgs.iterm2
+  # pkgs.iterm2
   pkgs.appcleaner
   pkgs.iina
   pkgs.net-news-wire
@@ -179,33 +209,33 @@ environment.systemPackages = with pkgs; [
   pkgs.xld
   # pkgs.darwin.xcode
   pkgs.apple-sdk
-  apple-sdk_15
+  #apple-sdk_15
   # pkgs.darwin.xcode
+  # pkgs.darwin.apple_sdk.frameworks
 
-#
-  # brewCasks gui
-  brewCasks.arq
+  # # brewCasks gui
+  # brewCasks.arq
   brewCasks.boop
-  # brewCasks.cocoapacketanalyzer
-  brewCasks.coteditor
-  brewCasks.devonthink
-  brewCasks.dhs
-  brewCasks.exactscan
-  brewCasks.firefox
-  brewCasks.fork
-  brewCasks.hazel
-  brewCasks.kextviewr
-  brewCasks.knockknock
-  # brewCasks.little-snitch           # ! /Applications required
-  brewCasks.marta
-  brewCasks.meta
-  brewCasks.nova
-  brewCasks.orbstack
-  brewCasks.orion
-  # brewCasks.steermouse              # ! /Applications required
-  # brewCasks.swinsian                # ! can't update to beta
-  brewCasks.textual
-  #brewCasks.
+  # # brewCasks.cocoapacketanalyzer
+  # brewCasks.coteditor
+  # brewCasks.devonthink
+  # brewCasks.dhs
+  # brewCasks.exactscan
+  # brewCasks.firefox
+  # brewCasks.fork
+  # brewCasks.hazel
+  # brewCasks.kextviewr
+  # brewCasks.knockknock
+  # # brewCasks.little-snitch           # ! /Applications required
+  # brewCasks.marta
+  # brewCasks.meta
+  # brewCasks.nova
+  # brewCasks.orbstack
+  # brewCasks.orion
+  # # brewCasks.steermouse              # ! /Applications required
+  # # brewCasks.swinsian                # ! can't update to beta
+  # brewCasks.textual
+  # #brewCasks.
 
   # brewCasks.blockblock              # ! install required
   # brewCasks.busycal                 # ! weird collisions

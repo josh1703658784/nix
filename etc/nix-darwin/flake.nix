@@ -69,6 +69,7 @@
     user-home-dir = "/Users/${username}";
     homebrew-volume = "/Volumes/nix-homebrew";
     homebrew-prefix = "${homebrew-volume}/opt/homebrew";
+    nix-config-dir = "${user-data-volume}/Developer/nix-configs/etc/nix-darwin";
   in
   {
     # Build darwin flake using:
@@ -82,6 +83,7 @@
         homebrew-prefix = homebrew-prefix;
         homebrew-cask = homebrew-cask;
         homebrew-volume = homebrew-volume;
+        nix-config-dir = nix-config-dir;
       };
       modules = [
         ./configuration.nix

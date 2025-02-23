@@ -10,6 +10,7 @@
   , config
   , pkgs
   , user-data-volume
+  , nix-config-dir
   , ...
 }:
 
@@ -143,6 +144,8 @@
       dbs  = "_Databases";
       dev  = "_Developer";
       docs = "_Documents";
+
+      # nix-config = "${inputs.nix-config-dir}";
     };
     shellAliases = {
       d       = "docker";
@@ -153,6 +156,7 @@
       ns      = "nix-shell";
       switch  = "sudo nixos-rebuild switch";
       ts      = "tailscale";
+      config  = ''git --git-dir="''${HOME}/.config/git-dotfiles" --work-tree="''${HOME}"'';
       # dcd   = "docker compose down";
       # dce   = "docker-compose exec";
       # dci   = "docker-compose-inspect";
