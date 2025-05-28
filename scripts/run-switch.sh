@@ -13,4 +13,4 @@ function info {
 clear
 info "AUTHing user with sudo: $(whoami)"
 sudo -v
-"${SCRIPT_DIR}/rebuild.sh"
+"${SCRIPT_DIR}/switch.sh"
