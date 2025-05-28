@@ -3,17 +3,29 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     mac-app-util.url = "github:hraban/mac-app-util";
     apple-fonts.url = "github:Lyndeno/apple-fonts.nix";
 
+    tailspin.url ="github:bensadeh/tailspin?branch=master";
+
+    # nix-darwin-unstable = {
     nix-darwin = {
-      url = "github:LnL7/nix-darwin/nix-darwin-24.11";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:LnL7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    # nix-darwin = {
+    #   url = "github:LnL7/nix-darwin/nix-darwin-24.11";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # home-manager = {
+    #   url = "github:nix-community/home-manager/release-24.11";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     nixvim = {
       url = "github:nix-community/nixvim/nixos-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -49,6 +61,7 @@
       self
     , nix-darwin
     , nixpkgs
+    , nixpkgs-unstable
     , brew-nix
     , brew-api
     , home-manager
@@ -64,7 +77,7 @@
   let
     system = "aarch64-darwin";
     username = "josh";
-    hostname = "admins-MacBook-Pro";
+    config-name = "mac-nix";
     user-data-volume = "/Volumes/${username}-data";
     user-home-dir = "/Users/${username}";
     homebrew-volume = "/Volumes/nix-homebrew";
@@ -74,7 +87,7 @@
   {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#admins-MacBook-Pro
-    darwinConfigurations."${hostname}" = nix-darwin.lib.darwinSystem {
+    darwinConfigurations."${config-name}" = nix-darwin.lib.darwinSystem {
       specialArgs = { # nix-darwin
         username = username;
         inputs = inputs;
@@ -84,36 +97,22 @@
         homebrew-cask = homebrew-cask;
         homebrew-volume = homebrew-volume;
         nix-config-dir = nix-config-dir;
+        # pkgs-unstable = nixpkgs-unstable;
+        pkgs-unstable = import nixpkgs-unstable {
+          inherit system;
+          config.allowUnfree = true;
+        };
       };
       modules = [
-        ./configuration.nix
+        ./nix-config.nix
         mac-app-util.darwinModules.default
 
         brew-nix.darwinModules.default
         nixvim.nixDarwinModules.nixvim
         nix-homebrew.darwinModules.nix-homebrew
-        # {
-        #   nix-homebrew = {
-        #     #@todo don't install at default location
-        #     enable = true;
-        #     mutableTaps = false;
-        #     enableRosetta = false;
-        #     taps = { "homebrew/homebrew-cask" = homebrew-cask; };
-        #     user = username;
-        #     prefixes = {
-        #       "${homebrew-prefix}" = {
-        #         enable = false;
-        #         library = "${homebrew-prefix}/Library";
-        #         taps = {
-        #           "homebrew/homebrew-core" = homebrew-core;
-        #           "homebrew/homebrew-cask" = homebrew-cask;
-        #           "homebrew/homebrew-bundle" = homebrew-bundle;
-        #         };
-        #       };
-        #     };
-        #   };
-        # }
-        ./darwin.nix
+        ./system-config.nix
+        ./homebrew.nix
+        ./packages.nix
 
         # nixvim.homeManagerModules.nixvim
         home-manager.darwinModules.home-manager
@@ -125,6 +124,8 @@
             username = username;
             inputs = inputs;
             user-data-volume = user-data-volume;
+            user-home-dir = user-home-dir;
+            homebrew-prefix = homebrew-prefix;
           };
         }
       ];

@@ -20,7 +20,7 @@ readonly TARGET_USER='josh'
 readonly ALLOW_BINS_ARR=(
   '/bin/cp'
   '/bin/rm'
-  '/nix/store/*-coreutils-9.5/bin/env'
+  '/nix/store/*-coreutils-*/bin/env'
   '/nix/store/*-setup-homebrew'
   '/System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util'
   '/usr/sbin/installer'
@@ -119,6 +119,15 @@ function give_sudo {
   sudo chown    root:wheel "${TARGET_FILEPATH}"
 
   sudo chmod 400 "${REAL_FILEPATH}" "${TARGET_FILEPATH}"
+
+  #(
+  #  info 'setting clean up in 5 minutes'
+  #  sleep 300
+  #  info '5 minutes is up, removing files giving sudo'
+  #  sudo rm -f "${TARGET_FILEPATH}" "${REAL_FILEPATH}"
+  #  info 'files removed'
+  #) &
+
 }
 
 function rebuild {
@@ -126,7 +135,7 @@ function rebuild {
   sudo -iu "${TARGET_USER}" bash -c 'sudo -v'
 
   info 'EXECUTING rebuild'
-  sudo -iu "${TARGET_USER}" bash -c 'darwin-rebuild switch'
+  sudo -iu "${TARGET_USER}" bash -c 'darwin-rebuild switch --show-trace'
 }
 
 function main {

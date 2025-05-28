@@ -14,6 +14,7 @@
     inputs
   , config
   , pkgs
+  , pkgs-unstable
   , username
   , user-home-dir
   , homebrew-prefix
@@ -24,157 +25,28 @@
 
 {
 
-# pkgs.brewCasks.busycal = newbusycal;
+
+networking.hostName = "mac-nix";
+networking.localHostName = "mac-nix";
+system.defaults.smb.NetBIOSName = "mac-nix";
+system.defaults.smb.ServerDescription = "mac-nix";
+# programs.ssh.knownHosts
 
 programs.nixvim.enable = true;
+programs.zsh.enable    = true;
 # programs.tmux.enable = true;
-
-
-nix-homebrew = {
-  #@todo don't install at default location
-  enable = true;
-  mutableTaps = false;
-  enableRosetta = false;
-  taps = { "homebrew/homebrew-cask" = inputs.homebrew-cask; };
-  user = username;
-  prefixes = {
-    "${homebrew-prefix}" = {
-      enable = true;
-      library = "${homebrew-prefix}/Library";
-      taps = {
-        # "homebrew/homebrew-core" = inputs.homebrew-core;
-        "homebrew/homebrew-cask" = inputs.homebrew-cask;
-        "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
-      };
-    };
-  };
-};
-
-
-
-programs.tmux = {
-  enableMouse = true;
-  enableVim = true;
-};
 
 users.users = {
   "${username}" = {
     home = user-home-dir;
   };
 };
-#
-homebrew.enable = true;
-homebrew = {
-  brewPrefix              = "${homebrew-prefix}/bin";
-  caskArgs.appdir         = "${homebrew-volume}/Applications"; #/nix-homebrew";
-  caskArgs.no_binaries    = true;
-  caskArgs.no_quarantine  = false;
-  caskArgs.require_sha    = true;
-  global.autoUpdate       = false;
-  onActivation.autoUpdate = false;
-  onActivation.cleanup    = "uninstall"; # set 'zap' global and uninstall per 'app'?
-  onActivation.upgrade    = false;
 
-  # https://daiderd.com/nix-darwin/manual/index.html#opt-homebrew.casks
-  casks = [
-    "blockblock"
-    "boop"
-    "busycal"
-    "coteditor"
-    "firefox"
-    "hiddenbar"
-    "neo-network-utility"
-    "reikey"
-    "sf-symbols"
-    # "swinsian"
-    "tailscale"
-    "thingsmacsandboxhelper"
-    "tor-browser"
-    "yubico-yubikey-manager"
-    {
-      name = "little-snitch";
-      args = { appdir = "/Applications"; };
-    }
-    {
-      name = "steermouse";
-      args = { appdir = "/Applications"; };
-    }
-    # {
-    #   name = "arq";
-    #   args = { appdir = "/Applications"; };
-    # }
-    "iterm2"
-    "appcleaner"
-    "iina"
-    "netnewswire"
-    "qbittorrent"
-    "signal"
-    "syncthing"
-    "xld"
-    # "arq"
-    "boop"
-    "coteditor"
-    "devonthink"
-    "dhs"
-    "exactscan"
-    "firefox"
-    "fork"
-    "hazel"
-    "kextviewr"
-    "knockknock"
-    "meta"
-    "marta"
-    "nova"
-    "orbstack"
-    "orion"
-    "textual"
-    # {
-    #   name = "swinsian";
-    #   args = { appdir = "/Applications"; };
-    #   # args = { appdir = "${user-home-dir}/Applications/Nix Applications"; };
-    # }
-  ];
-  # masApps = {
-    # "1blocker" = 1365531024;
-    # actions = 1586435171
-    # amphetamine = 937984704;
-    # anybox = 1593408455
-    # bear = 1091189122
-    # controllerforhomekit = 1198176727
-    # dark reader for safari = 1438243180
-    # data jar = 1453273600
-    # infuse = 1136220934
-    # kagi for safari = 1622835804
-    # logger = 1479321094
-    # mapper = 1589391989
-    # micro snitch = 972028355
-    # monodraw = 920404675
-    # musicbox = 1614730313
-    # musicharbor = 1440405750
-    # noir = 1592917505
-    # number = 409203825
-    # ok json = 1576121509
-    # pages = 409201541
-    # parcel = 639968404
-    # photomator = 1444636541
-    # pixelmator pro = 1289583905
-    # pushover
-    # redirect web for safari = 1571283503
-    # regexp
-    # rippple = 1309894528
-    # soulver 3 = 1508732804
-    # stopthefonts = 1671452642
-    # stopthemadness pro = -2118554294
-    # strongbox = 1481853033
-    # surfed = 1591590700
-    # things = 904280696
-    # utm = 1538878817
-    # wifi explorer = 494803304
-
-  # };
+programs.tmux = {
+  enableMouse = true;
+  enableVim = true;
 };
 
-#environment.variables.EDITOR = "nvim";
 
 programs.nixvim = {
   viAlias = true;
@@ -190,115 +62,11 @@ programs.nixvim = {
   '';
 };
 
-brew-nix.enable = true;
-environment.systemPackages = with pkgs; [
-  # cli
-  pkgs.git
-  pkgs.mas
-  pkgs.yadm
-  pkgs.gtrash # trash
+# touchid in terminal
+security.pam.services.sudo_local.touchIdAuth = true;
 
-  # nixpkgs gui
-  # pkgs.iterm2
-  pkgs.appcleaner
-  pkgs.iina
-  pkgs.net-news-wire
-  pkgs.qbittorrent
-  pkgs.signal-desktop
-  pkgs.syncthing
-  pkgs.xld
-  # pkgs.darwin.xcode
-  pkgs.apple-sdk
-  #apple-sdk_15
-  # pkgs.darwin.xcode
-  # pkgs.darwin.apple_sdk.frameworks
 
-  # # brewCasks gui
-  # brewCasks.arq
-  brewCasks.boop
-  # # brewCasks.cocoapacketanalyzer
-  # brewCasks.coteditor
-  # brewCasks.devonthink
-  # brewCasks.dhs
-  # brewCasks.exactscan
-  # brewCasks.firefox
-  # brewCasks.fork
-  # brewCasks.hazel
-  # brewCasks.kextviewr
-  # brewCasks.knockknock
-  # # brewCasks.little-snitch           # ! /Applications required
-  # brewCasks.marta
-  # brewCasks.meta
-  # brewCasks.nova
-  # brewCasks.orbstack
-  # brewCasks.orion
-  # # brewCasks.steermouse              # ! /Applications required
-  # # brewCasks.swinsian                # ! can't update to beta
-  # brewCasks.textual
-  # #brewCasks.
 
-  # brewCasks.blockblock              # ! install required
-  # brewCasks.busycal                 # ! weird collisions
-  # brewCasks.hiddenbar
-  # brewCasks.neo-network-utility     # ! cannot undmg non-hfs
-  # brewCasks.photosweeper-x
-  # brewCasks.reikey                  # ! install required
-  # brewCasks.sf-symbols              # ! install required
-  # brewCasks.tor-browser
-  # brewCasks.yubico-yubikey-manager  # ! install required
-
-  # overrides
-  # (brewCasks.busycal.overrideAttrs (o: {
-  #   src = pkgs.fetchurl {
-  #     url = (builtins.replaceStrings [".zip"] [".dmg" ] o.src.url);
-  #     # sha256 = "sha256-4reNiGyU2Woc+4OIVhQexVZYqdPeyg3Ff3qtkA8ZE4E=";
-  #     hash = "sha256-4reNiGyU2Woc+4OIVhQexVZYqdPeyg3Ff3qtkA8ZE4E=";
-  #   };
-  #   unpackPhase = "undmg $src";
-  # }))
-  (brewCasks.alfred.overrideAttrs (o: {
-    nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.gnutar ];
-    unpackPhase = "tar -xvzf $src";
-  }))
-  (brewCasks.imageoptim.overrideAttrs (o: {
-    nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.gnutar ];
-    unpackPhase = "tar -xvf $src";
-  }))
-  # (brewCasks.neo-network-utility.overrideAttrs (o: {
-  #   nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.gnutar ];
-  #   unpackPhase = ''
-  #   unzip -c "''${src}"
-  #   dmgsrc="$(echo "''${src}" | sed 's/\.zip$//g')"
-  #   undmg "''${dmgsrc}"
-  #   # echo
-  #   '';
-  #   # url = (builtins.replaceStrings [".zip"] [""] o.src.url);
-  # }))
-  (brewCasks.powerphotos.overrideAttrs (o: {
-    src = pkgs.fetchurl {
-      url = builtins.head o.src.urls;
-      hash = "sha256-YqCtMiim1B48XzKJcnJ5yUI7qVUquY6FTltF+Jf6Y/A=";
-    };
-  }))
-  (brewCasks.suspicious-package.overrideAttrs (o: {
-    src = pkgs.fetchurl {
-      url = builtins.head o.src.urls;
-      hash = "sha256-//iL7BRdox+KA1CJnGttUQiUfskuBeMGrf1YUNt/m90=";
-    };
-  }))
-
-  # (brewCasks.PACKAGE.overrideAttrs (o: {
-  #   src = pkgs.fetchurl {
-  #     url = builtins.head o.src.urls;
-  #     hash = lib.fakeHash; # Replace me with real hash after building once
-  #   };
-  # }))
-];
-
-#
-# # @ TODO look at using orbstack as a "nix.linux-bulder"
-#
-#
 # # nix.settings.allowed-users = ["josh" "admin" "root"];
 # nix.checkConfig = true;
 # brew-nix.enable = true;
@@ -326,14 +94,8 @@ environment.systemPackages = with pkgs; [
 # #   "2620:fe::fe"
 # #   "2620:fe::9"
 # # ];
-  security.pam.enableSudoTouchIdAuth = true;
-#
-# # # List packages installed in system profile. To search by name, run:
-# # # $ nix-env -qaP | grep wget
-# # environment.systemPackages =
-# #   [ pkgs.vim
-# #   ];
-#
+
+
 # # Set Git commit hash for darwin-version.
 # # system.configurationRevision = self.rev or self.dirtyRev or null;
 #
@@ -343,27 +105,6 @@ environment.systemPackages = with pkgs; [
 # # The platform the configuration will be used on.
 # nixpkgs.hostPlatform = "aarch64-darwin";
 #
-# services.nix-daemon.enable = true;
-#
-# # fonts.packages
-#
-# nix = {
-#   package                       = pkgs.nix;
-#   gc.automatic                  = true;
-#   gc.interval                   = { Weekday = 0; Hour = 0; Minute = 0; };
-#   gc.options                    = "--delete-older-than 30d";
-#   optimise.automatic            = true;
-#   settings                      = {
-#     extra-experimental-features = [ "nix-command" "flakes" ];
-#     experimental-features       = "nix-command flakes";
-#   };
-# };
-#
- programs           = {
-#   gnupg.agent.enable = true;
-   zsh.enable         = true;  # default shell on catalina
- };
-
 
 # *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*\
 # [[ macos system configuration]] \ | / - \ | / - \ | / - \ | / - \ | / -*|
@@ -502,6 +243,15 @@ system.defaults.controlcenter = {
 
 # https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.CustomSystemPreferences
 #system.defaults.CustomSystemPreferences = {}; # sets custom system preferences
-#system.defaults.CustomUserPreferences = {};
+# system.defaults.CustomUserPreferences = {};
+
+# system.defaults.CustomUserPreferences."com.apple.Safari" = {
+#   # vv enable develop menu
+#   "WebKitDeveloperExtrasEnabledPreferenceKey" = 1;
+#   "WebKitPreferences.developerExtrasEnabled"  = 1;
+#   "IncludeDevelopMenu"                        = 1;
+#   "PreferencesModulesMinimumWidths.DeveloperMenuVisibility" = 1;
+#   # ^^ enable develop menu
+# };
 
 }
