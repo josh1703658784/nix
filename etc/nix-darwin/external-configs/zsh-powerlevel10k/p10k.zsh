@@ -35,6 +35,7 @@
     # os_icon               # os identifier
     dir                     # current directory
     vcs                     # git status
+    docker_context          # docker status
     # =========================[ Line #2 ]=========================
     newline                 # \n
     prompt_char             # prompt symbol
@@ -185,6 +186,53 @@
     # End filler on the edge of the screen if there are no right segments on the first line.
     typeset -g POWERLEVEL9K_EMPTY_LINE_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL='%{%}'
   fi
+
+  #################################[ docker: docker-related info ]##################################
+  typeset -g POWERLEVEL9K_DOCKER_CONTEXT_FOREGROUND=27
+
+  typeset -g POWERLEVEL9K_DOCKER_CONTEXT_VISUAL_IDENTIFIER_EXPANSION='🐳'
+
+  function prompt_docker_context() {
+    local docker_context_cache="/tmp/p10k_docker_context"
+    local docker_context_cache_timestamp="/tmp/p10k_docker_context_timestamp"
+    local cache_ttl=60
+
+    if [[ -f "$docker_context_cache" && -f "$docker_context_cache_timestamp" ]]; then
+      local now=$(date +%s)
+      local cache_time=$(cat "$docker_context_cache_timestamp")
+      if (( now - cache_time < cache_ttl )); then
+        local cached_context=$(cat "$docker_context_cache")
+        if [[ -n "$cached_context" ]]; then
+          p10k segment -f 27 -i '🐳' -t "$cached_context"
+          return
+        fi
+      fi
+    fi
+
+    local docker_context
+    docker_context=$(docker context show 2>/dev/null)
+    if [[ -n "$docker_context" ]]; then
+      echo "$docker_context" > "$docker_context_cache"
+      date +%s > "$docker_context_cache_timestamp"
+      p10k segment -f 27 -i '🐳' -t "$docker_context"
+    fi
+  }
+
+  function docker_context_cache_clear() {
+    rm -f "/tmp/p10k_docker_context" "/tmp/p10k_docker_context_timestamp"
+  }
+
+  if ! typeset -f docker > /dev/null; then
+    function docker() {
+      command docker "$@"
+      local ret=$?
+      if [[ "$1" == "context" && "$2" == "use" ]]; then
+        docker_context_cache_clear
+      fi
+      return $ret
+    }
+  fi
+
 
   #################################[ os_icon: os identifier ]##################################
   # OS identifier color.
@@ -426,42 +474,42 @@
       res+=" ${modified}wip"
     fi
 
-    if (( VCS_STATUS_COMMITS_AHEAD || VCS_STATUS_COMMITS_BEHIND )); then
-      # ⇣42 if behind the remote.
-      (( VCS_STATUS_COMMITS_BEHIND )) && res+=" ${clean}⇣${VCS_STATUS_COMMITS_BEHIND}"
-      # ⇡42 if ahead of the remote; no leading space if also behind the remote: ⇣42⇡42.
-      (( VCS_STATUS_COMMITS_AHEAD && !VCS_STATUS_COMMITS_BEHIND )) && res+=" "
-      (( VCS_STATUS_COMMITS_AHEAD  )) && res+="${clean}⇡${VCS_STATUS_COMMITS_AHEAD}"
-    elif [[ -n $VCS_STATUS_REMOTE_BRANCH ]]; then
-      # Tip: Uncomment the next line to display '=' if up to date with the remote.
-      # res+=" ${clean}="
-    fi
+    # if (( VCS_STATUS_COMMITS_AHEAD || VCS_STATUS_COMMITS_BEHIND )); then
+    #   # ⇣42 if behind the remote.
+    #   (( VCS_STATUS_COMMITS_BEHIND )) && res+=" ${clean}⇣${VCS_STATUS_COMMITS_BEHIND}"
+    #   # ⇡42 if ahead of the remote; no leading space if also behind the remote: ⇣42⇡42.
+    #   (( VCS_STATUS_COMMITS_AHEAD && !VCS_STATUS_COMMITS_BEHIND )) && res+=" "
+    #   (( VCS_STATUS_COMMITS_AHEAD  )) && res+="${clean}⇡${VCS_STATUS_COMMITS_AHEAD}"
+    # elif [[ -n $VCS_STATUS_REMOTE_BRANCH ]]; then
+    #   # Tip: Uncomment the next line to display '=' if up to date with the remote.
+    #   # res+=" ${clean}="
+    # fi
 
-    # ⇠42 if behind the push remote.
-    (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${clean}⇠${VCS_STATUS_PUSH_COMMITS_BEHIND}"
-    (( VCS_STATUS_PUSH_COMMITS_AHEAD && !VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" "
-    # ⇢42 if ahead of the push remote; no leading space if also behind: ⇠42⇢42.
-    (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+="${clean}⇢${VCS_STATUS_PUSH_COMMITS_AHEAD}"
-    # *42 if have stashes.
-    (( VCS_STATUS_STASHES        )) && res+=" ${clean}*${VCS_STATUS_STASHES}"
-    # 'merge' if the repo is in an unusual state.
-    [[ -n $VCS_STATUS_ACTION     ]] && res+=" ${conflicted}${VCS_STATUS_ACTION}"
-    # ~42 if have merge conflicts.
-    (( VCS_STATUS_NUM_CONFLICTED )) && res+=" ${conflicted}~${VCS_STATUS_NUM_CONFLICTED}"
-    # +42 if have staged changes.
-    (( VCS_STATUS_NUM_STAGED     )) && res+=" ${modified}+${VCS_STATUS_NUM_STAGED}"
-    # !42 if have unstaged changes.
-    (( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified}!${VCS_STATUS_NUM_UNSTAGED}"
-    # ?42 if have untracked files. It's really a question mark, your font isn't broken.
-    # See POWERLEVEL9K_VCS_UNTRACKED_ICON above if you want to use a different icon.
-    # Remove the next line if you don't want to see untracked files at all.
-    (( VCS_STATUS_NUM_UNTRACKED  )) && res+=" ${untracked}${(g::)POWERLEVEL9K_VCS_UNTRACKED_ICON}${VCS_STATUS_NUM_UNTRACKED}"
-    # "─" if the number of unstaged files is unknown. This can happen due to
-    # POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY (see below) being set to a non-negative number lower
-    # than the number of files in the Git index, or due to bash.showDirtyState being set to false
-    # in the repository config. The number of staged and untracked files may also be unknown
-    # in this case.
-    (( VCS_STATUS_HAS_UNSTAGED == -1 )) && res+=" ${modified}─"
+    # # ⇠42 if behind the push remote.
+    # (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${clean}⇠${VCS_STATUS_PUSH_COMMITS_BEHIND}"
+    # (( VCS_STATUS_PUSH_COMMITS_AHEAD && !VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" "
+    # # ⇢42 if ahead of the push remote; no leading space if also behind: ⇠42⇢42.
+    # (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+="${clean}⇢${VCS_STATUS_PUSH_COMMITS_AHEAD}"
+    # # *42 if have stashes.
+    # (( VCS_STATUS_STASHES        )) && res+=" ${clean}*${VCS_STATUS_STASHES}"
+    # # 'merge' if the repo is in an unusual state.
+    # [[ -n $VCS_STATUS_ACTION     ]] && res+=" ${conflicted}${VCS_STATUS_ACTION}"
+    # # ~42 if have merge conflicts.
+    # (( VCS_STATUS_NUM_CONFLICTED )) && res+=" ${conflicted}~${VCS_STATUS_NUM_CONFLICTED}"
+    # # +42 if have staged changes.
+    # (( VCS_STATUS_NUM_STAGED     )) && res+=" ${modified}+${VCS_STATUS_NUM_STAGED}"
+    # # !42 if have unstaged changes.
+    # (( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified}!${VCS_STATUS_NUM_UNSTAGED}"
+    # # ?42 if have untracked files. It's really a question mark, your font isn't broken.
+    # # See POWERLEVEL9K_VCS_UNTRACKED_ICON above if you want to use a different icon.
+    # # Remove the next line if you don't want to see untracked files at all.
+    # (( VCS_STATUS_NUM_UNTRACKED  )) && res+=" ${untracked}${(g::)POWERLEVEL9K_VCS_UNTRACKED_ICON}${VCS_STATUS_NUM_UNTRACKED}"
+    # # "─" if the number of unstaged files is unknown. This can happen due to
+    # # POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY (see below) being set to a non-negative number lower
+    # # than the number of files in the Git index, or due to bash.showDirtyState being set to false
+    # # in the repository config. The number of staged and untracked files may also be unknown
+    # # in this case.
+    # (( VCS_STATUS_HAS_UNSTAGED == -1 )) && res+=" ${modified}─"
 
     typeset -g my_git_format=$res
   }

@@ -18,10 +18,7 @@
 # brew-nix.enable = true;
 # brew-nix.enable = true;
 environment.systemPackages = with pkgs-unstable; [
-  mas
-  bat
-  watch
-  nix-search-cli
+
 
   # nixpkgs gui
   # pkgs.iterm2

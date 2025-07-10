@@ -90,10 +90,10 @@ homebrew.casks = [
   "neo-network-utility"
   "netnewswire"   # <nixpkg>
   "nova"
-  {
-    name = "orbstack";
-    args = { no_binaries = false; };
-  }
+  # {
+  #   name = "orbstack";
+  #   args = { no_binaries = false; };
+  # }
   "orion"         # <brewCask>
   "qbittorrent"   # <nixpkg>
   # "reikey"                # installs to /Applications
@@ -115,10 +115,10 @@ homebrew.casks = [
     name = "blockblock";
     args = { appdir = "/Applications"; };
   }
-  {
-    name = "mailmate@beta";
-    args = { require_sha = false; };
-  }
+  # {
+  #   name = "mailmate@beta";
+  #   args = { require_sha = false; };
+  # }
   {
     name = "busycontacts";
     args = { require_sha = false; };
@@ -127,6 +127,10 @@ homebrew.casks = [
     name = "suspicious-package";
     args = { require_sha = false; };
   }
+#   {
+#     name = "photosweeper-x";
+#     args = { require_sha = false; };
+#   }
   {
     name = "powerphotos";
     args = { require_sha = false; };

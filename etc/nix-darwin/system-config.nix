@@ -130,8 +130,6 @@ system.defaults.dock = {
   mru-spaces              = false;  # automatically rearrange spaces based on most recent use
   persistent-apps         = [];     # persistent applications
   persistent-others       = [       # persistent folders
-    "/Users/josh/Documents/workdir/running.txt"
-    "/Volumes/Data"
     "/Users/josh/Downloads"
   ];
 };

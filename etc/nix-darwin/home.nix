@@ -37,6 +37,7 @@ programs.skim.enable         = true; # fuzzy search
 programs.tmux.enable         = true;
 programs.zsh.enable          = true;
 programs.home-manager.enable = true;
+programs.firefox.enable = true;
 # programs.ssh.enable = true;
 
 # home.activation.name = config.lib.hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -75,10 +76,20 @@ home.packages = with pkgs; [
   yadm # dotfile manager
   tailspin
   inputs.tailspin
-  docker-compose
+  # docker-compose
   docker
   sipcalc
   wget
+  watch
+  nix-search-cli
+  mas
+  inetutils
+  discordo
+  ack
+  rig
+  docker-credential-helpers
+  discordo
+  rclone
   # docker context create nas --description 'synology nas' --docker "host=ssh://freon@nas.stonecat-shark.ts.net"
 
 
@@ -181,15 +192,15 @@ programs.zsh = {
   };
   shellAliases = {
     d       = "docker";
-    dc      = "docker-compose";
-    dc-recreate = "docker-compose up --detach --force-recreate";
-    dcr     = "docker-compose up --detach --force-recreate --renew-anon-volumes";
+    dc      = "docker compose";
+    dc-recreate = "docker compose up --detach --force-recreate";
+    dcr     = "docker compose up --detach --force-recreate --renew-anon-volumes";
     dcrl    = "docker-compose-recreate-log";
     g       = "git";
     ll      = "ls -la";
     l       = "ls -la";
     ns      = "nix-shell";
-    switch  = "su - admin '${user-data-volume}/Developer/nix-configs/scripts/run-switch.sh'";
+    switch  = "su - admin '${user-data-volume}/Developer/nix-configs/etc/nix-darwin/scripts/run-switch.sh'";
     diff    = "ksdiff";
     tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
     ts        = "tailscale";
