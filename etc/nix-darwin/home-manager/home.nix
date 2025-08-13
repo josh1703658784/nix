@@ -16,14 +16,6 @@
 }:
 
 let
-  # tailspin = import (
-  #   pkgs.fetchFromGitHub {
-  #     owner = "bensadeh";
-  #     repo = "tailspin";
-  #     rev = "7a38079";
-  #     sha256 = "sha256-PCFgMDQvM+wMDlZUfgt4tuwqMTx/tgyCXoBMcLDNSnk=";
-  #   }
-  # );
 
 in
 
@@ -46,60 +38,10 @@ programs.firefox.enable = true;
 
 
 home.file = {
-  _Databases.source    = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/Databases";
-  _Developer.source    = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/Developer";
-  _Documents.source    = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/Documents";
   _HOME.source         = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}";
-  _Music.source        = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/Music";
-  _Pictures.source     = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/Pictures";
-  _Sync.source         = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/Sync";
-  _bin.source          = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/bin";
-  _etc.source          = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/etc";
-  _opt.source          = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}/opt";
-  _Applications.source = config.lib.file.mkOutOfStoreSymlink "${user-home-dir}/Applications";
-  _Desktop.source      = config.lib.file.mkOutOfStoreSymlink "${user-home-dir}/Desktop";
-  _Downloads.source    = config.lib.file.mkOutOfStoreSymlink "${user-home-dir}/Downloads";
-  _Movies.source       = config.lib.file.mkOutOfStoreSymlink "${user-home-dir}/Movies";
-  _Orbstack.source     = config.lib.file.mkOutOfStoreSymlink "${user-home-dir}/Orbstack";
-  _tmp.source          = config.lib.file.mkOutOfStoreSymlink "${user-home-dir}/tmp";
-  _public.source       = config.lib.file.mkOutOfStoreSymlink "${user-home-dir}/Public";
-
-  # _tmp.source       = config.lib.file.mkOutOfStoreSymlink "/Volumes/josh-data/tmp";
-  # tmp.src.recursive = true;
 };
 
-home.packages = with pkgs; [
-  zsh-powerlevel10k
-  bat
-  git
-  shellcheck
-  yadm # dotfile manager
-  tailspin
-  inputs.tailspin
-  # docker-compose
-  docker
-  sipcalc
-  wget
-  watch
-  nix-search-cli
-  mas
-  inetutils
-  discordo
-  ack
-  rig
-  docker-credential-helpers
-  discordo
-  rclone
-  # docker context create nas --description 'synology nas' --docker "host=ssh://freon@nas.stonecat-shark.ts.net"
-
-
-  # FONTS
-  # nerdfonts @TODO this changed to individual fonts with unstable - fix
-  meslo-lgs-nf
-  inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
-];
-
-# fonts.packages = [ ] ++ builtins.filter config.lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
+home.packages = pkgs.callPackage ./home.pkgs.nix {};
 
 # fuzzy finder: https://github.com/casonadams/skim.zsh
 programs.skim = {
@@ -200,7 +142,7 @@ programs.zsh = {
     ll      = "ls -la";
     l       = "ls -la";
     ns      = "nix-shell";
-    switch  = "su - admin '${user-data-volume}/Developer/nix-configs/etc/nix-darwin/scripts/run-switch.sh'";
+    switch  = "su - admin -c 'sudo darwin-rebuild switch --show-trace --flake \"${user-data-volume}/Developer/nix-configs/etc/nix-darwin\"'";
     diff    = "ksdiff";
     tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
     ts        = "tailscale";
@@ -212,7 +154,7 @@ programs.zsh = {
     dcul  = "docker-compose-up-d-log-colorize";
     sc    = "shellcheck";
   };
-  initExtra = builtins.readFile ./external-configs/zsh-shell-functions/functions.sh;
+  initContent = builtins.readFile ./external-configs/zsh-shell-functions/functions.sh;
 
 };
 

@@ -20,17 +20,17 @@
   , homebrew-prefix
   , nix-homebrew
   , homebrew-volume
+  , config-name
   , ...
 }:
 
 {
 
-
-networking.hostName = "mac-nix";
-networking.localHostName = "mac-nix";
-system.defaults.smb.NetBIOSName = "mac-nix";
-system.defaults.smb.ServerDescription = "mac-nix";
-# programs.ssh.knownHosts
+networking.computerName               = config-name;
+networking.hostName                   = config-name;
+networking.localHostName              = config-name;
+system.defaults.smb.NetBIOSName       = config-name;
+system.defaults.smb.ServerDescription = config-name;
 
 programs.nixvim.enable = true;
 programs.zsh.enable    = true;
@@ -65,35 +65,35 @@ programs.nixvim = {
 # touchid in terminal
 security.pam.services.sudo_local.touchIdAuth = true;
 
+system.primaryUser = "admin";
 
+networking.applicationFirewall.enable = false; # use little-snitch
+networking.wakeOnLan.enable = false;
+networking.applicationFirewall = {
+  allowSigned = true;
+  allowSignedApp = false;
+  blockAllIncoming = true;
+  enableStealthMode = true;
+};
 
-# # nix.settings.allowed-users = ["josh" "admin" "root"];
-# nix.checkConfig = true;
-# brew-nix.enable = true;
-# environment.systemPackages = pkgs.callPackage ./darwin-pkgs.nix {};
-#
-# # networking.computerName = "mbp";
-# # networking.hostName = "mbp";
-# networking.knownNetworkServices = [
-#   "Wi-Fi"
-#   "Tailscale" # this might break if TS doesn't exist yet?
-# ];
-#
-# # networking.search = [
-# #   "stonecat-shark.ts.net"
-# #   "local"
-# # ];
-#
-# # networking.wakeOnLan.enable = false;
-# #
-# #
-# # networking.dns = [
-# #   # all quad 9
-# #   "9.9.9.9"
-# #   "149.112.112.112"
-# #   "2620:fe::fe"
-# #   "2620:fe::9"
-# # ];
+networking.knownNetworkServices = [
+  "Wi-Fi"
+  "Tailscale" # this might break if TS doesn't exist yet?
+  "NextDNS"
+];
+networking.search = [
+  "stonecat-shark.ts.net"
+  "local"
+];
+
+networking.dns = [
+  "192.168.10.34"
+  # all quad 9
+  "9.9.9.9"
+  "149.112.112.112"
+  "2620:fe::fe"
+  "2620:fe::9"
+];
 
 
 # # Set Git commit hash for darwin-version.
@@ -144,7 +144,7 @@ system.defaults.NSGlobalDomain = {
   AppleInterfaceStyle                  = "Dark";
   AppleScrollerPagingBehavior          = true;  # jump to the spot that's clicked on the scroll bar
   AppleShowAllExtensions               = true;  # show all file extensions in Finder
-  AppleShowAllFiles                    = true;  # always show hidden files
+  AppleShowAllFiles                    = false;  # always show hidden files
   AppleShowScrollBars                  = "Always";    # when to show the scrollbars
   AppleWindowTabbingMode               = "always";    # sets the window tabbing when opening a new document
   NSAutomaticCapitalizationEnabled     = false; # enable automatic capitalization
@@ -157,7 +157,7 @@ system.defaults.NSGlobalDomain = {
   NSDocumentSaveNewDocumentsToCloud    = false; # save new documents to iCloud by default
   NSNavPanelExpandedStateForSaveMode   = true;  # use expanded save panel by default.
   NSNavPanelExpandedStateForSaveMode2  = true;  # use expanded save panel by default.
-  NSTableViewDefaultSizeMode           = 1;     # 1 = small; sets the size of the finder sidebar icons
+  NSTableViewDefaultSizeMode           = 2;     # 1 = small; sets the size of the finder sidebar icons
   NSWindowShouldDragOnGesture          = true;  # enable moving window by holding anywhere
   "com.apple.sound.beep.feedback"      = 0;     # 0 = off; feedback sound when the system volume changed
   "com.apple.trackpad.forceClick"      = true;  # enable trackpad force click
@@ -167,7 +167,7 @@ system.defaults.NSGlobalDomain = {
 
 system.defaults.finder = {
   AppleShowAllExtensions          = true;     # show file extensions
-  AppleShowAllFiles               = true;     #  show hidden files
+  AppleShowAllFiles               = false;     #  show hidden files
   CreateDesktop                   = true;    # show icons on the desktop
   FXDefaultSearchScope            = "SCcf";   # SCcf = current dir; default search scope
   FXEnableExtensionChangeWarning  = false;    # show warnings when changing a file extension
@@ -215,19 +215,7 @@ system.keyboard = {
   remapCapsLockToEscape = true;
 };
 
-system.defaults.alf = {
-  globalstate                = 0; # 0=disable; disable the internal firewall
-  # little snitch acts as the outbound+inbound firewall
 
-  # allows any downloaded application that has been signed to accept incoming requests
-  allowdownloadsignedenabled = 0; # 0 = false
-
-  # allows any signed Application to accept incoming requests
-  allowsignedenabled         = 0; # 0 = false
-
-  # drops incoming requests via ICMP
-  stealthenabled             = 1;
-};
 
 system.defaults.controlcenter = {
   AirDrop               = false;
@@ -239,8 +227,16 @@ system.defaults.controlcenter = {
   Sound                 = true;
 };
 
+# https://macos-defaults.com
 # https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.CustomSystemPreferences
-#system.defaults.CustomSystemPreferences = {}; # sets custom system preferences
+
+system.defaults.CustomSystemPreferences."com.apple.CloudSubscriptionFeatures.optIn" = {
+  # https://macos-defaults.com/misc/apple-intelligence.html#toggle-apple-intelligence
+  "545129924" = "false";
+};
+
+
+# system.defaults.CustomSystemPreferences = {}; # sets custom system preferences
 # system.defaults.CustomUserPreferences = {};
 
 # system.defaults.CustomUserPreferences."com.apple.Safari" = {
