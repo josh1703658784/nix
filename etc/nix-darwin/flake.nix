@@ -1,32 +1,13 @@
 {
   inputs = {
-    nixpkgs.url          = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     apple-fonts.url      = "github:Lyndeno/apple-fonts.nix";
-    nix-homebrew.url     = "github:zhaofengli/nix-homebrew";
+    discordo.url         = "github:ayn2op/discordo";
     home-manager.url     = "github:nix-community/home-manager";
-    nixvim.url           = "github:nix-community/nixvim";
     nix-darwin.url       = "github:LnL7/nix-darwin/master";
-    discordo.url = "github:ayn2op/discordo";
-      # inputs.nixpkgs.follows = "nixpkgs-unstable";
-    # };
-
-
-    nixcasks = {
-      url = "github:jacekszymanski/nixcasks";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-#     brew-nix = {
-#       # https://github.com/BatteredBunny/brew-nix
-#       url = "github:BatteredBunny/brew-nix";
-#       inputs.brew-api.follows = "brew-api";
-#     };
-#
-#     brew-api = {
-#       # part of 'brew-nix' above
-#       url = "github:BatteredBunny/brew-api";
-#       flake = false;
-#     };
+    nix-homebrew.url     = "github:zhaofengli/nix-homebrew";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url          = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
+    nixvim.url           = "github:nix-community/nixvim";
 
     homebrew-core = {
       # https://github.com/zhaofengli/nix-homebrew

@@ -231,26 +231,6 @@
         "type": "github"
       }
     },
-    "nixcasks": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1755034850,
-        "narHash": "sha256-5F73OHA8a0n5NADmNiWnw313eLTWkxhkAgpKyFiflBo=",
-        "owner": "jacekszymanski",
-        "repo": "nixcasks",
-        "rev": "9bf6bee4e80b6a2abed75ef45ec482baccaaaa70",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jacekszymanski",
-        "repo": "nixcasks",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1740828860,
@@ -429,7 +409,6 @@
         "homebrew-core": "homebrew-core",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
-        "nixcasks": "nixcasks",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvim": "nixvim"
