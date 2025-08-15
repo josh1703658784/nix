@@ -37,6 +37,12 @@
       flake                     = false;
     };
 
+    homebrew-legacy             = {
+      # https://github.com/josh1703658784/homebrew-legacy
+      url                       = "github:josh1703658784/homebrew-legacy";
+      flake                     = false;
+    };
+
     homebrew-bundle           = {
       # https://github.com/zhaofengli/nix-homebrew
       # https://github.com/zhaofengli/nix-homebrew/issues/9#issuecomment-1774684583
@@ -57,7 +63,7 @@
 
     nix-darwin-linking        = {
       # https://github.com/nix-darwin/nix-darwin/pull/1396#issuecomment-3150075769
-      # https://github.com/dwt/nix-darwin
+      # https://github.com/dwt/nix-darwin/tree/application-linking-done-right
       url                       = "github:dwt/nix-darwin/application-linking-done-right";
       inputs.nixpkgs.follows    = "nixpkgs";
     };

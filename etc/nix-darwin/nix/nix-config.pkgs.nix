@@ -7,27 +7,22 @@ with pkgs;
   # pkgs.brewCasks.busycal              # INSTALLER + Error opening xar archive
   # pkgs.brewCasks.busycontacts         # INSTALLER + Error opening xar archive
   # pkgs.brewCasks.cocoapacketanalyzer  # ERROR: noBrokenSymlinks: the symlink ... points to a missing target
+  # (pkgs.brewCasks.cocoapacketanalyzer.overrideAttrs (o: {
+    # fixupPhase = "ls; pwd; exit 255";
+    # unpackPhase = "7zz x $src; mv 'Tor Browser/Tor Browser.app' .";
+  # }))
+
   # pkgs.brewCasks.devonthink           # dt4, want dt3
   # pkgs.brewCasks.little-snitch        # does not install to /Applications
-  # pkgs.brewCasks.mullvad-browser      # Headers Error
   # pkgs.brewCasks.sf-symbols           # Error opening xar archive
   # pkgs.brewCasks.swinsian             # not beta
   # pkgs.brewCasks.tailscale-app        # gzip: Distribution.pkg/Payload: not in gzip format
-  # pkgs.brewCasks.tor-browser          # Headers Error (on opening dmg)
+
 
   (pkgs.brewCasks.alfred.overrideAttrs (o: {
     nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.gnutar ];
     unpackPhase = "tar -xvzf $src";
   }))
-
-
-  # (pkgs.brewCasks.devonthink.overrideAttrs (oldAttrs: {
-  #   # https://libmedium.stonecat-shark.ts.net/@dallasclark/install-a-previous-version-of-an-application-with-homebrew-cask-9d3b8d288db6
-  #   src = pkgs.fetchurl {
-  #     url = "https://download.devontechnologies.com/download/devonthink/3.9.14/DEVONthink_3.dmg.zip";
-  #     hash = "sha256-IxpWpdl5cVH6CrxN9iJU4zDrniqyTudE5NPvhsUpwH8=";
-  #   };
-  # }))
 
   (pkgs.brewCasks.hookmark.overrideAttrs (oldAttrs: {
     src = pkgs.fetchurl {
@@ -42,18 +37,26 @@ with pkgs;
     unpackPhase = "tar -xf $src";
   }))
 
+  (pkgs.brewCasks.mullvad-browser.overrideAttrs (o: {
+    sourceRoot = lib.strings.concatStringsSep "/" [ (lib.strings.removeSuffix ".app" o.sourceRoot) o.sourceRoot];
+  }))
+
   (pkgs.brewCasks.powerphotos.overrideAttrs (oldAttrs: {
     src = pkgs.fetchurl {
       url = builtins.head oldAttrs.src.urls;
-      hash = "sha256-7yMQeopRbT0XNAJQffF/ncRyszAhaB6hSC/cGvjIrGY=";
+      hash = "sha256-budnnAQODN7wvxDfNYl/NO6fS50LO0b4/reIE7+oxKw=";
     };
   }))
 
   (pkgs.brewCasks.suspicious-package.overrideAttrs (oldAttrs: {
     src = pkgs.fetchurl {
       url = builtins.head oldAttrs.src.urls;
-      hash = "sha256-//iL7BRdox+KA1CJnGttUQiUfskuBeMGrf1YUNt/m90=";
+      hash = "sha256-SJcXqQR/di3T8K3uNKv00QkLsmDGJNU9NQEIpDSqYJM=";
     };
+  }))
+
+  (pkgs.brewCasks.tor-browser.overrideAttrs (o: {
+    sourceRoot = lib.strings.concatStringsSep "/" [ (lib.strings.removeSuffix ".app" o.sourceRoot) o.sourceRoot];
   }))
 
   (pkgs.brewCasks.yate.overrideAttrs (oldAttrs: {
