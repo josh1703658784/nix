@@ -67,33 +67,33 @@ security.pam.services.sudo_local.touchIdAuth = true;
 
 system.primaryUser = "admin";
 
-networking.applicationFirewall.enable = false; # use little-snitch
+# networking.applicationFirewall.enable = false; # use little-snitch
 networking.wakeOnLan.enable = false;
-networking.applicationFirewall = {
-  allowSigned = true;
-  allowSignedApp = false;
-  blockAllIncoming = true;
-  enableStealthMode = true;
-};
+# networking.applicationFirewall = {
+#   allowSigned = true;
+#   allowSignedApp = false;
+#   blockAllIncoming = true;
+#   enableStealthMode = true;
+# };
 
-networking.knownNetworkServices = [
-  "Wi-Fi"
-  "Tailscale" # this might break if TS doesn't exist yet?
-  "NextDNS"
-];
-networking.search = [
-  "stonecat-shark.ts.net"
-  "local"
-];
-
-networking.dns = [
-  "192.168.10.34"
-  # all quad 9
-  "9.9.9.9"
-  "149.112.112.112"
-  "2620:fe::fe"
-  "2620:fe::9"
-];
+# networking.knownNetworkServices = [
+#   "Wi-Fi"
+#   "Tailscale" # this might break if TS doesn't exist yet?
+#   "NextDNS"
+# ];
+# networking.search = [
+#   "stonecat-shark.ts.net"
+#   "local"
+# ];
+#
+# networking.dns = [
+#   "192.168.10.34"
+#   # all quad 9
+#   "9.9.9.9"
+#   "149.112.112.112"
+#   "2620:fe::fe"
+#   "2620:fe::9"
+# ];
 
 
 # # Set Git commit hash for darwin-version.

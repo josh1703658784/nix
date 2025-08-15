@@ -1,6 +1,7 @@
-{ pkgs}:
+{ pkgs }:
 with pkgs;
 [
+  # cli
   ack
   bat
   # discordo

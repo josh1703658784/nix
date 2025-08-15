@@ -1,5 +1,12 @@
-{ self, nix-darwin, pkgs, ... }: {
+{ self, nix-darwin, pkgs, nixcasks, nixpkgs, ... }: {
   nix.enable = false; # nix-determinate overrides this
+
+  #   pkgs = import nixpkgs {
+  #   inherit system;
+  #   config.packageOverrides = _: {
+  #     inherit nixcasks;
+  #   };
+  # };
 
   # nix-darwin.specialArgs.user = "josh";
   # Necessary for using flakes on this system.
@@ -35,8 +42,9 @@
   # };
   #
 
-  #environment.systemPackages = [
-  # ];
+  brew-nix.enable = true;
+
+  environment.systemPackages = pkgs.callPackage ./nix-config.pkgs.nix {};
 
   # find symlink of all apps here
   #"${outputs.darwinConfigurations.admins-MacBook-Pro.config.system.build.applications.outPath}/Applications"

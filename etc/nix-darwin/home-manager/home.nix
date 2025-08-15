@@ -32,10 +32,6 @@ programs.home-manager.enable = true;
 programs.firefox.enable = true;
 # programs.ssh.enable = true;
 
-# home.activation.name = config.lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-#   mkdir -p "''${HOME}/tmp"
-# '';
-
 
 home.file = {
   _HOME.source         = config.lib.file.mkOutOfStoreSymlink "${user-data-volume}";

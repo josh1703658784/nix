@@ -1,30 +1,81 @@
 {
   inputs = {
-    apple-fonts.url      = "github:Lyndeno/apple-fonts.nix";
-    discordo.url         = "github:ayn2op/discordo";
-    home-manager.url     = "github:nix-community/home-manager";
-    nix-darwin.url       = "github:LnL7/nix-darwin/master";
-    nix-homebrew.url     = "github:zhaofengli/nix-homebrew";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs.url          = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
-    nixvim.url           = "github:nix-community/nixvim";
+    nixpkgs.url               = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
+    nixpkgs-unstable.url      = "github:nixos/nixpkgs/nixos-unstable";
+    nix-homebrew.url          = "github:zhaofengli/nix-homebrew";
 
-    homebrew-core = {
-      # https://github.com/zhaofengli/nix-homebrew
-      url = "github:homebrew/homebrew-core";
-      flake = false;
+    nix-darwin                = {
+      url                       = "github:LnL7/nix-darwin/nix-darwin-25.05";
+      inputs.nixpkgs.follows    = "nixpkgs";
     };
-    homebrew-cask = {
-      # https://github.com/zhaofengli/nix-homebrew
-      url = "github:homebrew/homebrew-cask";
-      flake = false;
+
+    home-manager              = {
+      url                       = "github:nix-community/home-manager/release-25.05";
+      inputs.nixpkgs.follows    = "nixpkgs";
     };
-    homebrew-bundle = {
+
+    nixvim                    = {
+      url                       = "github:nix-community/nixvim/nixos-25.05";
+      inputs.nixpkgs.follows    = "nixpkgs";
+    };
+
+    homebrew-core             = {
+      # https://github.com/zhaofengli/nix-homebrew
+      url                       = "github:homebrew/homebrew-core";
+      flake                     = false;
+    };
+
+    homebrew-cask             = {
+      # https://github.com/zhaofengli/nix-homebrew
+      url                       = "github:homebrew/homebrew-cask";
+      flake                     = false;
+    };
+
+    homebrew-empty             = {
+      # https://github.com/josh1703658784/homebrew-empty
+      url                       = "github:josh1703658784/homebrew-empty";
+      flake                     = false;
+    };
+
+    homebrew-bundle           = {
       # https://github.com/zhaofengli/nix-homebrew
       # https://github.com/zhaofengli/nix-homebrew/issues/9#issuecomment-1774684583
-      url = "github:homebrew/homebrew-bundle";
-      flake = false;
+      url                       = "github:homebrew/homebrew-bundle";
+      flake                     = false;
     };
+
+    apple-fonts               = {
+      # https://github.com/Lyndeno/apple-fonts.nix
+      url                       = "github:Lyndeno/apple-fonts.nix";
+      inputs.nixpkgs.follows    = "nixpkgs";
+    };
+
+    discordo                  = {
+      url                       = "github:ayn2op/discordo";
+      inputs.nixpkgs.follows    = "nixpkgs";
+    };
+
+    nix-darwin-linking        = {
+      # https://github.com/nix-darwin/nix-darwin/pull/1396#issuecomment-3150075769
+      # https://github.com/dwt/nix-darwin
+      url                       = "github:dwt/nix-darwin/application-linking-done-right";
+      inputs.nixpkgs.follows    = "nixpkgs";
+    };
+
+    brew-nix                  = {
+      # https://github.com/BatteredBunny/brew-nix
+      url                       = "github:BatteredBunny/brew-nix";
+      inputs.nix-darwin.follows = "nix-darwin";
+      inputs.brew-api.follows   = "brew-api";
+      inputs.nixpkgs.follows    = "nixpkgs";
+    };
+
+    brew-api                  = {
+      # https://github.com/BatteredBunny/brew-api
+      url                       = "github:BatteredBunny/brew-api";
+      flake                     = false;
+    };
+
   };
 
   outputs = inputs@{
@@ -39,6 +90,8 @@
     , homebrew-core
     , homebrew-cask
     , homebrew-bundle
+    , brew-nix
+    # , nixcasks
     , ...
   }:
   let
@@ -65,18 +118,21 @@
           config.allowUnfree = true;
         };
       };
+
       modules = [
-
+        brew-nix.darwinModules.default
         nix-homebrew.darwinModules.nix-homebrew
-        ./nix-config.nix
-
         nixvim.nixDarwinModules.nixvim
-        ./system-config.nix
 
+        ./nix/nix-config.nix
+        ./system/system-config.nix
         ./homebrew/brew.nix
         ({config, ...}: {
           homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
         })
+
+        { disabledModules = [ "system/applications.nix" ]; }
+        "${inputs.nix-darwin-linking}/modules/system/applications.nix"
 
         home-manager.darwinModules.home-manager
         {

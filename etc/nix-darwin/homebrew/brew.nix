@@ -13,13 +13,14 @@
 
 {
 
-nix-homebrew.enable = true; # installs homebrew
-homebrew.enable     = true;      # enables homebrew integration
+nix-homebrew.enable = true;     # installs homebrew
+homebrew.enable     = true;     # enables homebrew integration
 
-# installation config
 nix-homebrew = {
+  # installs/configure homebrew
+  # https://github.com/zhaofengli/nix-homebrew
   mutableTaps = false;
-  enableRosetta = false;
+  enableRosetta = true;
   user = "admin";
   taps = {
     "homebrew/homebrew-core" = inputs.homebrew-core;
@@ -28,19 +29,21 @@ nix-homebrew = {
   };
 };
 
-# environment.systemPath = [ "${homebrew-prefix}/bin" ];
 homebrew = {
   brews                   = pkgs.lib.mkForce [ ]; # https://github.com/LnL7/nix-darwin/pull/1329
+  caskArgs.appdir         = "${user-home-dir}/Applications/nix-homebrew";
   caskArgs.no_binaries    = true;
-  caskArgs.no_quarantine  = false;
   caskArgs.require_sha    = true;
-  global.autoUpdate       = true;
-  global.brewfile         = false;
-  onActivation.autoUpdate = true;
-  onActivation.cleanup    = "uninstall";          # set 'zap' global and uninstall per 'app'?
-  onActivation.upgrade    = true;
+  caskArgs.no_quarantine  = false;
+  global.brewfile         = true;
+  onActivation.cleanup    = "uninstall";
   casks                   = pkgs.callPackage ./brew.casks.nix {};
   # masApps                 = pkgs.callPackage ./brew.mas.nix {};
+
+  # upgrades/updates
+  onActivation.upgrade    = false;
+  onActivation.autoUpdate = false;
+  global.autoUpdate       = false;
 };
 
 

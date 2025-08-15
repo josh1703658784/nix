@@ -6,70 +6,32 @@ _:
 #   args = { require_sha = false; };
 # }
 
+# {
+#   name = "_NAME_";
+#   args = { appdir = "/Applications"; };
+# }
+
+
 [
   {
     name = "busycontacts";
     args = { require_sha = false; };
   }
   {
-    name = "powerphotos";
-    args = { require_sha = false; };
+    name = "little-snitch";
+    args = { appdir = "/Applications"; };
   }
   {
-    name = "suspicious-package";
-    args = { require_sha = false; };
-  }
-  {
-    name = "tailscale-app";
+    name = "tailscale-app";           # installs to /Applications
     args = { no_binaries = false; };
   }
-  {
-    name = "yate";
-    args = { require_sha = false; };
-  }
-  # "1password"
-  "alfred"
-  "appcleaner"    # <nixpkg>
-  # "beeper"
-  "blockblock"
-  "boop"          # <brewCask>
+  "blockblock"            # installs to /Applications
   "busycal"               # installs to /Applications
   "busycontacts"
   "cocoapacketanalyzer"   # installs to /Applications
-  "coteditor"     # <brewCask>
-  "devonthink"    # <brewCask>
-  "dhs"           # <brewCask>
-  "exactscan"     # <brewCask>
-  "firefox"       # <brewCask>
-  "fork"          # <brewCask>
-  "halloy"
-  "hazel"         # <brewCask>
-  "hookmark"
-  "iina"          # <nixpkg>
-  "imageoptim"
-  "iterm2"        # <nixpkg>
-  # "jordanbaird-ice"
-  "kaleidoscope@3"
-  "keepassxc"
-  "kextviewr"     # <brewCask>
-  "knockknock"    # <brewCask>
-  # "macpass"
-  "marta"         # <brewCask>
-  "meta"          # <brewCask>
+  # "devonthink"            # dt4, <brewCask>
   "mullvad-browser"
-  # "neo-network-utility"
-  "netnewswire"   # <nixpkg>
-  "nova"
-  "orion"         # <brewCask>
-  "qbittorrent"   # <nixpkg>
   "sf-symbols"            # installs to /Applications
-  "signal"        # <nixpkg>
-  "steermouse"
-  "swinsian"      # need r/w to upgrade to beta
-  "syncthing-app"
-  "textual"       # <brewCask>
-  "thingsmacsandboxhelper"
+  "swinsian"              # need r/w to upgrade to beta
   "tor-browser"
-  "xld"
-  "yubico-authenticator"
 ]
