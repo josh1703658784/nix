@@ -6,17 +6,6 @@
 
 let
   overrides = import ./app-overrides.nix { inherit pkgs; };
-  crateOverrides = pkgs.callPackage build-support/crate-overrides.nix {};
-  crateTools = pkgs.callPackage "${inputs.crate2nix}/tools.nix" {};
-  buildRustCrate = pkgs.buildRustCrate.override {
-    defaultCrateOverrides = crateOverrides;
-  };
-  cargoNix = pkgs.callPackage (crateTools.generatedCargoNix {
-    name = "dotbackup";
-    src = "github.com:jaxvanyang/dotbackup.rs";
-  }) {
-    inherit buildRustCrate;
-  };
 in
 {
 
@@ -42,9 +31,7 @@ homebrew.casks = [
 
 environment.systemPackages = [
   pkgs.mas
-  # pkgs.trufflehog
   pkgs.chezmoi
-  pkgs.dotbot
 
   overrides.alfred
   overrides.busycal
