@@ -54,18 +54,7 @@ home.file = {
 
 home.packages = pkgs.callPackage ./home.pkgs.nix { inherit userHomeDir; };
 
-home.file = {
-  "chezmoi" = {
-    enable = true;
-    force = true;
-    target = "/.config/chezmoi/chezmoi.toml";
-    text = ''
-      [git]
-      autoCommit = true
-      autoPush = true
-    '';
-  };
-};
+# home.file = { };
 
 
 # fuzzy finder: https://github.com/casonadams/skim.zsh
