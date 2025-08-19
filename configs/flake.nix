@@ -136,6 +136,7 @@
     configName     = "mac-nix";
     username       = "josh";
     primaryUser    = "josh";
+    homebrewUser   = "admin";
     system         = "aarch64-darwin";
     userDataVolume = "/Volumes/_DATA_";
     homebrewPrefix = "${userHomeDir}/opt/homebrew";
@@ -157,33 +158,56 @@
     # );
   in
   {
-    darwinConfigurations."${configName}" = nix-darwin.lib.darwinSystem {
-      inherit system;
-      specialArgs = {
-        inherit
-        inputs
-        configName
-        username
-        userHomeDir
-        userDataVolume
-        primaryUser
-        system
-        ;
+    darwinConfigurations = {
+      mac-nix = nix-darwin.lib.darwinSystem {
+        inherit system;
+        specialArgs = {
+          inherit
+          inputs
+          configName
+          username
+          userHomeDir
+          userDataVolume
+          primaryUser
+          system
+          homebrewUser
+          ;
+        };
+
+        modules = [
+          nix-homebrew.darwinModules.nix-homebrew
+          brew-nix.darwinModules.default
+          home-manager.darwinModules.home-manager
+          ./hosts/darwin
+        ];
       };
-
-      modules = [
-        nix-homebrew.darwinModules.nix-homebrew
-        brew-nix.darwinModules.default
-        home-manager.darwinModules.home-manager
-
-        ./hosts/darwin
-      ];
     };
 
     nixosConfigurations = {
-      modules = [
-        ./modules/orbstack/configuration.orbstack.nix
-      ];
+      orbstack = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit
+          inputs
+          configName
+          username
+          userHomeDir
+          userDataVolume
+          primaryUser
+          system
+          homebrewUser
+          ;
+        };
+        # specialArgs = {inherit inputs username userHomeDir;};
+        system = "aarch64-linux";
+        # system.stateVersion = "25.05";
+        modules = [
+          home-manager.nixosModules.home-manager
+          hosts/orbstack
+    #       # > Our main nixos configuration file <
+          # ./nixos/configuration.nix
+          # ./modules/orbstack/configuration.orbstack.nix
+        ];
+      };
     };
   };
 }

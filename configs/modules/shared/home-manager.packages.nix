@@ -8,17 +8,22 @@ with pkgs;
   ack
   bat
   # discordo
+  devbox
   docker
   docker-credential-helpers
-  git
+  # git
   inetutils
+  jq
   meslo-lgs-nf
   nix-search-cli
   rclone
   rig
   shellcheck
   sipcalc
+  shellcheck
+  shfmt
   tailspin
+  textql
   watch
   wget
   yadm # dotfile manager

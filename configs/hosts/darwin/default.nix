@@ -16,16 +16,14 @@
 }:
 
 let
-  foo = "bar";
 in
 {
   imports = [
     { disabledModules = [ "system/applications.nix" ]; }
     ../../modules/darwin/system.applications.nix
     ../../modules/darwin/system.nix
-    ../../modules/darwin/macos.nix
     ../../modules/darwin/homebrew.nix
-    ../../modules/darwin/apps.nix
+    ../../modules/darwin/software.nix
     ../../modules/darwin/home-manager.nix
   ];
 

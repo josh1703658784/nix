@@ -1,0 +1,4 @@
+{}:
+{
+  AutomaticallyInstallMacOSUpdates = false;
+}

@@ -5,7 +5,7 @@
 }:
 
 let
-  overrides = import ./app-overrides.nix { inherit pkgs; };
+  overrides = import ./software.casks-overrides.nix { inherit pkgs; };
 in
 {
 

@@ -7,11 +7,5 @@ in
 
 shared-packages ++ [
   chezmoi
-
-  # D
   dockutil # Manage icons in the dock
-
-
-  # F
-  fswatch # File change monitor
 ]

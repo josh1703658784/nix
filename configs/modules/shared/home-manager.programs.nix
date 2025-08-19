@@ -19,14 +19,14 @@ in
 
 home-manager.enable = true;
 
-nixvim.enable       = true;
+
 direnv.enable       = true;
 git.enable          = true;
+nixvim.enable       = true;
 nnn.enable          = true;
 skim.enable         = true; # fuzzy search
 tmux.enable         = true;
 zsh.enable          = true;
-
 
 nixvim                  = {
   viAlias                          = true;
