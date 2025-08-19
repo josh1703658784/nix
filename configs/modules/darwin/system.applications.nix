@@ -1,5 +1,6 @@
 # modified the below PR
 # https://github.com/nix-darwin/nix-darwin/pull/1396
+# manage nix darwin linking/copying gui packages
 {
   config,
   lib,

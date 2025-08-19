@@ -1,10 +1,33 @@
-# options: https://mynixos.com/nix-darwin/options/nix
 {
-    pkgs
+    system
+  , inputs
+  , pkgs
   , nixpkgs
-  , system
+  , lib
+  , config
+  , specialArgs
+  , configName
+  , username
+  , primaryUser
+  , userDataVolume
+  , userHomeDir
   , ...
-}: {
+
+}:
+
+let
+  foo = "bar";
+in
+{
+  imports = [
+    { disabledModules = [ "system/applications.nix" ]; }
+    ../../modules/darwin/system.applications.nix
+    ../../modules/darwin/system.nix
+    ../../modules/darwin/macos.nix
+    ../../modules/darwin/homebrew.nix
+    ../../modules/darwin/apps.nix
+    ../../modules/darwin/home-manager.nix
+  ];
 
   nix.enable = false; # nix-determinate overrides this
 
@@ -27,5 +50,6 @@
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = system;
   nixpkgs.config.allowUnfree = true;
+
 
 }

@@ -18,9 +18,16 @@ https://github.com/Misterio77/nix-starter-configs
 https://nixos.wiki/wiki/Cleaning_the_nix_store
 https://nixos.wiki/wiki/Storage_optimization
 https://matthewrhone.dev/nixos-package-guide#cleanup-old-packages-user-wide
+```
+$ nix-channel --update
+$ nix-env -u --always
+$ rm /nix/var/nix/gcroots/auto/*
+$ nix-collect-garbage -d
+```
 
 # nix helper links
 * [nix best practices](https://nix.dev/guides/best-practices)
+* [nix pills](https://nixos.org/guides/nix-pills/02-install-on-your-running-system.html)
 
 # commands
 `nix flake metadata` will list of graph of inputs - this can be useful for configuring the `.follows` properly
@@ -42,4 +49,5 @@ https://github.com/hraban/mac-app-util
 Wraps `brew` for declarative cask management
 B/c it relies on `brew` it isn't a "clean" solution but it is very reliable
 https://github.com/zhaofengli/nix-homebrew
+
 

@@ -15,6 +15,11 @@
       inputs.nixpkgs.follows    = "nixpkgs";
     };
 
+    # flake-parts = {
+    #   url = "github:hercules-ci/flake-parts";
+    #   inputs.nixpkgs-lib.follows = "nixpkgs";
+    # };
+
     ###############################
     ## HOMEBREW \_/-\_/-\_/-\_/-\_/
     ###############################
@@ -27,9 +32,9 @@
       flake                     = false;
     };
 
-    homebrew-legacy             = {
-      # https://github.com/josh1703658784/homebrew-legacy
-      url                       = "github:josh1703658784/homebrew-legacy";
+    homebrew-pinned             = {
+      # https://github.com/josh1703658784/homebrew-pinned
+      url                       = "github:josh1703658784/homebrew-pinned";
       flake                     = false;
     };
 
@@ -73,8 +78,9 @@
       inputs.nixpkgs.follows    = "nixpkgs";
     };
 
-    crate2nix_stable = {
+    crate2nix = {
       url = "github:nix-community/crate2nix/0.12.0";
+      # url = "github:nix-community/crate2nix";
     };
 
     nix-test-runner = {
@@ -82,10 +88,10 @@
       flake = false;
     };
 
-    stylix = {
-      url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # stylix = {
+    #   url = "github:nix-community/stylix";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     # apple-fonts               = {
     #   # https://github.com/Lyndeno/apple-fonts.nix
@@ -123,7 +129,7 @@
     , nixvim
     , nix-homebrew
     , nix-darwin
-    , stylix
+    , crate2nix
     , ...
   }:
   let
@@ -135,83 +141,49 @@
     homebrewPrefix = "${userHomeDir}/opt/homebrew";
     nixConfigDir   = "${userDataVolume}/Developer/nix-configs/etc/nix-darwin";
     userHomeDir    = "/Users/${username}";
-    specialArgs = {
-      inherit
-      inputs
-      configName
-      username
-      userHomeDir
-      userDataVolume
-      primaryUser
-      system
-      ;
-    };
-    homeSpecialArgs = {
-      inherit
-      inputs
-      userDataVolume
-      userHomeDir
-      ;
-    };
 
     supportedSystems = [
       # "x86_64-linux"
       # "aarch64-linux"
       "aarch64-darwin"
     ];
-    forEachSupportedSystem =
-    f:
-    nixpkgs.lib.genAttrs supportedSystems (
-      system:
-      f {
-        pkgs = import nixpkgs { inherit system; };
-      }
-    );
+    # forEachSupportedSystem =
+    # f:
+    # nixpkgs.lib.genAttrs supportedSystems (
+    #   system:
+    #   f {
+    #     pkgs = import nixpkgs { inherit system; };
+    #   }
+    # );
   in
   {
     darwinConfigurations."${configName}" = nix-darwin.lib.darwinSystem {
-      inherit system specialArgs;
+      inherit system;
+      specialArgs = {
+        inherit
+        inputs
+        configName
+        username
+        userHomeDir
+        userDataVolume
+        primaryUser
+        system
+        ;
+      };
+
       modules = [
-        # manage nix darwin linking/copying gui packages
-        { disabledModules = [ "system/applications.nix" ]; }
-        ./system/applications.nix
-
-        # manage homebrew binary
         nix-homebrew.darwinModules.nix-homebrew
-
-        # manage nix homebrew wrapper
         brew-nix.darwinModules.default
-
-        stylix.darwinModules.stylix
-
-        ./modules/darwin/nix.nix
-        ./modules/darwin/system.nix
-        ./modules/darwin/macos.nix
-        ./modules/darwin/homebrew.nix
-        ./modules/darwin/apps.nix
-
-        # home manager
         home-manager.darwinModules.home-manager
-        {
-          home-manager.sharedModules       = [ nixvim.homeManagerModules.nixvim ];
-          home-manager.useGlobalPkgs       = true;
-          home-manager.useUserPackages     = true;
-          home-manager.users."${username}" = import ./modules/home-manager/home.nix;
-          home-manager.extraSpecialArgs    = homeSpecialArgs;
-        }
+
+        ./hosts/darwin
       ];
     };
 
-
-    customPackages = (
-      { pkgs }:
-      {
-        cargo = pkgs.callPackage ./packages/Cargo.nix { };
-    #     nix-tester-runner = pkgs.callPackage ./packages/nix-test-runner.nix { };
-        # dotbackup = pkgs.callPackage ./packages/nix-test-runner.nix { };
-        # grafana-ntfy = pkgs.callPackage ./packages/grafana-ntfy.nix { };
-      }
-    );
-
+    nixosConfigurations = {
+      modules = [
+        ./modules/orbstack/configuration.orbstack.nix
+      ];
+    };
   };
 }

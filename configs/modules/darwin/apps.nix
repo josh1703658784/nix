@@ -22,16 +22,16 @@ homebrew.casks = [
   #   name = "tailscale";           # uses installer; installs to /Applications
   #   args = { no_binaries = false; };
   # }
-  # "blockblock"            # installs to /Applications
+  "blockblock"            # installs to /Applications
   "devonthink@3"
   "nova@12.4"
-  # "sf-symbols"            # installs to /Applications
-  "swinsian"              # need r/w to upgrade to beta
+  "sf-symbols"            # installs to /Applications
+  "orbstack"
+  "swinsian@3"
 ];
 
 environment.systemPackages = [
   pkgs.mas
-  pkgs.chezmoi
 
   overrides.alfred
   overrides.busycal
@@ -63,6 +63,7 @@ environment.systemPackages = [
   pkgs.brewCasks.monodraw
   pkgs.brewCasks.mp3tag
   pkgs.brewCasks.netiquette
+  # pkgs.brewCasks.orbstack
   pkgs.brewCasks.orion
   pkgs.brewCasks.proxyman
   pkgs.brewCasks.signal

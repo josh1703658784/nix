@@ -6,11 +6,8 @@
 # https://search.nixos.org
 
 {
-    inputs
-  , config
-  , pkgs
+    pkgs
   , userDataVolume
-  , userHomeDir
   , ...
 }:
 
@@ -19,21 +16,19 @@ let
 in
 
 {
-programs.home-manager.enable = true;
 
-fonts.fontconfig.enable      = true;
-programs.nixvim.enable       = true;
-programs.direnv.enable       = true;
-programs.git.enable          = true;
-programs.nnn.enable          = true;
-programs.skim.enable         = true; # fuzzy search
-programs.tmux.enable         = true;
-programs.zsh.enable          = true;
-# programs.firefox.enable = true;
-# programs.ssh.enable = true;
+home-manager.enable = true;
+
+nixvim.enable       = true;
+direnv.enable       = true;
+git.enable          = true;
+nnn.enable          = true;
+skim.enable         = true; # fuzzy search
+tmux.enable         = true;
+zsh.enable          = true;
 
 
-programs.nixvim                  = {
+nixvim                  = {
   viAlias                          = true;
   vimAlias                         = true;
   defaultEditor                    = true;
@@ -48,21 +43,12 @@ programs.nixvim                  = {
   '';
 };
 
-home.file = {
-  _DATA_.source         = config.lib.file.mkOutOfStoreSymlink "${userDataVolume}";
-};
-
-home.packages = pkgs.callPackage ./home.pkgs.nix { inherit userHomeDir; };
-
-# home.file = { };
-
-
 # fuzzy finder: https://github.com/casonadams/skim.zsh
-programs.skim = {
+skim = {
   enableZshIntegration = true;
 };
 
-programs.git = {
+git = {
   diff-so-fancy.enable = true;
   ignores = [ ".secret" ".secrets" ".nocommit" ".ignore"];
   # https://docs.codeberg.org/git/configuring-git/
@@ -70,12 +56,12 @@ programs.git = {
   userEmail = "josh_1752185424@noreply.codeberg.org";
 };
 
-programs.direnv = {
+direnv = {
   enableZshIntegration = true;
   nix-direnv.enable = true;
 };
 
-programs.tmux = {
+tmux = {
   clock24 = true;
   # shell = ""; # broken https://github.com/nix-community/home-manager/issues/5952
   extraConfig = ''
@@ -95,7 +81,7 @@ programs.tmux = {
   ];
 };
 
-programs.zsh = {
+zsh = {
   autocd = true;
   enableCompletion = true;
   autosuggestion.enable = true;
@@ -112,7 +98,7 @@ programs.zsh = {
     }
     {
       name = "powerlevel10k-config";
-      src = ./external-configs/zsh-powerlevel10k;
+      src = ./config/zsh-powerlevel10k;
       file = "p10k.zsh";
     }
     {
@@ -166,10 +152,7 @@ programs.zsh = {
     dcul         = "docker-compose-up-d-log-colorize";
     sc           = "shellcheck";
   };
-  initContent = builtins.readFile ./external-configs/zsh-shell-functions/functions.sh;
+  initContent = builtins.readFile ./config/zsh-shell-functions/functions.sh;
 
 };
-
-# system.stateVersion = "24.11";
-home.stateVersion = "24.11";
 }

@@ -1,6 +1,5 @@
 {
     pkgs
-  , userHomeDir
 }:
 with pkgs;
 [

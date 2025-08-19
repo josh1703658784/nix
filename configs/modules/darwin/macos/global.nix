@@ -23,7 +23,7 @@
   NSNavPanelExpandedStateForSaveMode       = true;  # use expanded save panel by default.
   NSNavPanelExpandedStateForSaveMode2      = true;  # use expanded save panel by default.
   NSScrollAnimationEnabled                 = true; # smooth scrolling
-  NSTableViewDefaultSizeMode               = 1;     # 1 = small; 3 = large; sets the size of the finder sidebar icons
+  NSTableViewDefaultSizeMode               = 3;     # 1 = small; 3 = large; sets the size of the finder sidebar icons
   NSWindowShouldDragOnGesture              = true;  # enable moving window by holding anywhere
   PMPrintingExpandedStateForPrint          = true; # expand print pane by default
   PMPrintingExpandedStateForPrint2         = true; # expand print pane by default

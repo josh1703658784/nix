@@ -21,11 +21,11 @@ nix-homebrew               = {
   # https://github.com/zhaofengli/nix-homebrew
   mutableTaps                = false;
   enableRosetta              = true;
-  user                       = primaryUser;
+  user                       = "admin"; #primaryUser;
   taps                       = {
       # "homebrew/homebrew-cask"   = inputs.homebrew-cask;
       "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
-      "homebrew/homebrew-legacy" = inputs.homebrew-legacy;
+      "josh/homebrew-pinned" = inputs.homebrew-pinned;
     # "josh/homebrew-empty" = inputs.homebrew-empty;
   };
 };
@@ -37,7 +37,7 @@ nix-homebrew.prefixes = {
     taps = {
       "josh/homebrew-empty" = inputs.homebrew-empty;
       "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
-      "homebrew/homebrew-legacy" = inputs.homebrew-legacy;
+      "josh/homebrew-pinned" = inputs.homebrew-pinned;
     };
   };
 };
@@ -46,7 +46,7 @@ nix-homebrew.prefixes = {
 homebrew = {
   brews                   = pkgs.lib.mkForce [ ]; # https://github.com/LnL7/nix-darwin/pull/1329
   # brewPrefix              = "${userHomeDir}/opt/homebrew/bin";
-  # user                    = primaryUser;
+  user                    = "admin";
   caskArgs.appdir         = "${userHomeDir}/Applications/Homebrew Apps";
   caskArgs.no_binaries    = true;
   caskArgs.require_sha    = true;
