@@ -1,7 +1,11 @@
-{ pkgs }:
+{
+    pkgs
+  , userHomeDir
+}:
 with pkgs;
 [
-  # cli
+
+    # cli
   ack
   bat
   # discordo
@@ -9,7 +13,6 @@ with pkgs;
   docker-credential-helpers
   git
   inetutils
-  mas
   meslo-lgs-nf
   nix-search-cli
   rclone

@@ -1,0 +1,6 @@
+{}:
+
+{
+  enableKeyMapping      = true;
+  remapCapsLockToEscape = true;
+}
