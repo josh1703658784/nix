@@ -8,6 +8,7 @@
 {
     pkgs
   , userDataVolume
+  , pubkeyPaths
   , ...
 }:
 
@@ -19,14 +20,15 @@ in
 
 home-manager.enable = true;
 
-
+nixvim.enable       = true;
 direnv.enable       = true;
 git.enable          = true;
-nixvim.enable       = true;
 nnn.enable          = true;
 skim.enable         = true; # fuzzy search
+ssh.enable          = true;
 tmux.enable         = true;
 zsh.enable          = true;
+
 
 nixvim                  = {
   viAlias                          = true;
@@ -43,17 +45,64 @@ nixvim                  = {
   '';
 };
 
+
+ssh            = {
+  # see https://github.com/nix-community/home-manager/issues/7266
+  extraConfig    = ''
+    IdentityAgent "~/Library/Group Containers/group.strongbox.mac.mcguill/agent.sock"
+    IdentitiesOnly yes
+  '';
+  includes       = ["~/.orbstack/ssh/config"];
+  matchBlocks    = {
+    "codeberg.org" = {
+      hostname       = "codeberg.org";
+      user           = "git";
+      identityFile = pubkeyPaths.codeberg;
+    };
+    "deck"         = {
+      hostname       = "192.168.20.145";
+      user           = "deck";
+      identityFile   = pubkeyPaths.deck;
+    };
+    "github"       = {
+      hostname       = "github.com";
+      user           = "git";
+      identityFile   = pubkeyPaths.github;
+    };
+    "gitea"        = {
+      hostname       = "gitea.stonecat-shark.ts.net";
+      user           = "git";
+      identityFile   = pubkeyPaths.gitea;
+    };
+    "nas"          = {
+      hostname       = "nas.stonecat-shark.ts.net";
+      user           = "freon";
+      identityFile   = pubkeyPaths.nas;
+    };
+    "nas.local"    = {
+      hostname       = "192.168.10.34";
+      user           = "freon";
+      identityFile   = pubkeyPaths.nas;
+    };
+    "router"       = {
+      hostname       = "192.168.10.1";
+      user           = "user00";
+      identityFile   = pubkeyPaths.router;
+    };
+  };
+};
+
 # fuzzy finder: https://github.com/casonadams/skim.zsh
 skim = {
   enableZshIntegration = true;
 };
 
-git = {
+git                  = {
   diff-so-fancy.enable = true;
-  ignores = [ ".secret" ".secrets" ".nocommit" ".ignore"];
+  ignores              = [ ".secret" ".secrets" ".nocommit" ".ignore"];
   # https://docs.codeberg.org/git/configuring-git/
-  userName = "josh_1752185424";
-  userEmail = "josh_1752185424@noreply.codeberg.org";
+  userName             = "josh_1752185424";
+  userEmail            = "josh_1752185424@noreply.codeberg.org";
 };
 
 direnv = {
@@ -69,14 +118,9 @@ tmux = {
     set-option -g set-titles-string "#{session_name} - #{host}"
     set -g default-command ${pkgs.zsh}/bin/zsh
   '';
-  # plugins = [
-  #   {
-  #     plugin = pkgs.tmuxPlugins.dracula;
-  #   }
-  # ];
-  plugins = with pkgs; [
+  plugins = [
     {
-      plugin = tmuxPlugins.dracula;
+      plugin = pkgs.tmuxPlugins.dracula;
     }
   ];
 };

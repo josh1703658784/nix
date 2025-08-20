@@ -4,19 +4,6 @@
 
 {
 
-  # devonthink = (pkgs.brewCasks.devonthink.overrideAttrs (o: {
-  #   # url = "https://download.devontechnologies.com/download/devonthink/3.9.14/DEVONthink_3.dmg.zip";
-  #   # src.urls = ["https://download.devontechnologies.com/download/devonthink/3.9.14/DEVONthink_3.dmg.zip"];
-  #   unpackPhase = "unzip $src; 7zz x 'DEVONthink_3.dmg'; mv 'DEVONthink 3/DEVONthink 3.app' .";
-  #   sourceRoot = "DEVONthink 3.app";
-  #   version = "3.9.14";
-  #   src = pkgs.fetchurl {
-  #     url = "https://download.devontechnologies.com/download/devonthink/3.9.14/DEVONthink_3.dmg.zip";
-  #     hash = "sha256-IxpWpdl5cVH6CrxN9iJU4zDrniqyTudE5NPvhsUpwH8=";
-  #     name = "DEVONthink 3.app.zip";
-  #   };
-  # }));
-
   alfred = (pkgs.brewCasks.alfred.overrideAttrs (o: {
     nativeBuildInputs = o.nativeBuildInputs ++ [ pkgs.gnutar ];
     unpackPhase = "tar -xvzf $src";

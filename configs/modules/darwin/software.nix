@@ -26,7 +26,6 @@ homebrew.casks = [
   "devonthink@3"
   "nova@12.4"
   "sf-symbols"            # installs to /Applications
-  "orbstack"
   "swinsian@3"
 ];
 
@@ -63,11 +62,10 @@ environment.systemPackages = [
   pkgs.brewCasks.monodraw
   pkgs.brewCasks.mp3tag
   pkgs.brewCasks.netiquette
-  # pkgs.brewCasks.orbstack
+  pkgs.brewCasks.orbstack
   pkgs.brewCasks.orion
   pkgs.brewCasks.proxyman
   pkgs.brewCasks.signal
-  # pkgs.brewCasks.steermouse
   pkgs.brewCasks.syncthing-app
   pkgs.brewCasks.taskexplorer
   pkgs.brewCasks.textual
