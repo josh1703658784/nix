@@ -3,15 +3,12 @@
 }:
 with pkgs;
 [
-
-    # cli
   ack
   bat
   # discordo
   devbox
-  docker
+  docker-client
   docker-credential-helpers
-  # git
   inetutils
   jq
   meslo-lgs-nf
@@ -26,7 +23,5 @@ with pkgs;
   textql
   watch
   wget
-  yadm # dotfile manager
   zsh-powerlevel10k
-  # inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
 ]

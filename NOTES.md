@@ -1,3 +1,5 @@
+[awesome nix](https://github.com/nix-community/awesome-nix)
+
 # options and package resources
 * [nix packages search](https://search.nixos.org)
 
