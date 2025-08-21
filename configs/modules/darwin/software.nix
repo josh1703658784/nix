@@ -24,7 +24,6 @@ homebrew.casks = [
   # }
   "blockblock"            # installs to /Applications
   "devonthink@3"
-  "nova@12.4"
   "sf-symbols"            # installs to /Applications
   "swinsian@3"
 ];
@@ -62,12 +61,14 @@ environment.systemPackages = [
   pkgs.brewCasks.monodraw
   pkgs.brewCasks.mp3tag
   pkgs.brewCasks.netiquette
+  pkgs.brewCasks.nova
   pkgs.brewCasks.orbstack
   pkgs.brewCasks.orion
   pkgs.brewCasks.proxyman
   pkgs.brewCasks.signal
   pkgs.brewCasks.syncthing-app
   pkgs.brewCasks.taskexplorer
+  # pkgs.brewCasks.tableplus
   pkgs.brewCasks.textual
   pkgs.brewCasks.thingsmacsandboxhelper
   pkgs.brewCasks.yubico-authenticator

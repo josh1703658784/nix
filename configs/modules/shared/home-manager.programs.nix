@@ -22,13 +22,13 @@ home-manager.enable = true;
 
 nixvim.enable       = true;
 direnv.enable       = true;
+docker-cli.enable   = false;
 git.enable          = true;
 nnn.enable          = true;
 skim.enable         = true; # fuzzy search
 ssh.enable          = true;
 tmux.enable         = true;
 zsh.enable          = true;
-
 
 nixvim                  = {
   viAlias                          = true;
@@ -44,7 +44,6 @@ nixvim                  = {
     set expandtab
   '';
 };
-
 
 ssh            = {
   # see https://github.com/nix-community/home-manager/issues/7266
