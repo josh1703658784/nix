@@ -25,7 +25,6 @@ homebrew.casks = [
   "blockblock"            # installs to /Applications
   "devonthink@3"
   "sf-symbols"            # installs to /Applications
-  "swinsian@3"
 ];
 
 environment.systemPackages = [
@@ -66,6 +65,7 @@ environment.systemPackages = [
   pkgs.brewCasks.orion
   pkgs.brewCasks.proxyman
   pkgs.brewCasks.signal
+  pkgs.brewCasks.swinsian
   pkgs.brewCasks.syncthing-app
   pkgs.brewCasks.taskexplorer
   # pkgs.brewCasks.tableplus

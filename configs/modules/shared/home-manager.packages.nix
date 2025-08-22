@@ -9,12 +9,15 @@ with pkgs;
   devbox
   docker-client
   docker-credential-helpers
+  fzf
   inetutils
   jq
   meslo-lgs-nf
   nix-search-cli
+  nix-search-tv # https://github.com/3timeslazy/nix-search-tv
   rclone
   rig
+  rsync
   shellcheck
   sipcalc
   shellcheck

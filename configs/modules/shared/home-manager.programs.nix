@@ -7,6 +7,7 @@
 
 {
     pkgs
+  , config
   , userDataVolume
   , pubkeyPaths
   , ...
@@ -29,6 +30,8 @@ skim.enable         = true; # fuzzy search
 ssh.enable          = true;
 tmux.enable         = true;
 zsh.enable          = true;
+# nix-search-tv.enable = true; # unstable
+
 
 nixvim                  = {
   viAlias                          = true;
@@ -171,6 +174,7 @@ zsh = {
     homelab-docker           = "${userDataVolume}/Developer/homelab-docker";
     homelab-docker-media     = "${userDataVolume}/Developer/homelab-docker/compose/media";
     homelab-docker-utilities = "${userDataVolume}/Developer/homelab-docker/compose/utilities";
+    repositories             = "${config.home.homeDirectory}/_DATA_/Developer";
   };
   shellAliases = {
     d            = "docker";
@@ -181,7 +185,6 @@ zsh = {
     g            = "git";
     ll           = "ls -la";
     l            = "ls -la";
-    ns           = "nix-shell";
     switch       = "su - admin -c 'sudo darwin-rebuild switch --flake \"${userDataVolume}/Developer/nix-configs/configs\"'";
     switch-v      = "su - admin -c 'sudo darwin-rebuild switch --show-trace -vvvvv --show-trace --flake \"${userDataVolume}/Developer/nix-configs/configs\"'";
     diff         = "ksdiff";
@@ -194,6 +197,9 @@ zsh = {
     dcu          = "docker compose up -d";
     dcul         = "docker-compose-up-d-log-colorize";
     sc           = "shellcheck";
+
+    # https://github.com/3timeslazy/nix-search-tv?tab=readme-ov-file#fzf
+    nix-search   = "nix-search-tv print | fzf --preview 'nix-search-tv preview {}' --scheme history";
   };
   initContent = builtins.readFile ./config/zsh-shell-functions/functions.sh;
 

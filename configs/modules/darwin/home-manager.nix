@@ -27,7 +27,7 @@ home-manager.useGlobalPkgs       = true;
 home-manager.useUserPackages     = true;
 home-manager.extraSpecialArgs    = { inherit userDataVolume userHomeDir pubkeyPaths; };
 
-home-manager.users."${username}" = { userDataVolume, userHomeDir, pubkeyPaths, ... }: {
+home-manager.users."${username}" = { userDataVolume, userHomeDir, pubkeyPaths, config, ... }: {
   home          = {
     packages      = pkgs.callPackage ./home-manager.packages.nix { inherit pkgs; };
     homeDirectory = userHomeDir;
@@ -64,8 +64,14 @@ home-manager.users."${username}" = { userDataVolume, userHomeDir, pubkeyPaths, .
         text = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA90frwx2GUhavtkMF7yBw3xZAhTYkAKR7owjsmZtGSt";
       };
     };
+
+    file."_DATA_".source = config.lib.file.mkOutOfStoreSymlink "/Volumes/_DATA_";
+    # https://github.com/nix-community/home-manager/issues/2085
+    # file."_test_dotfile_".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/_test_dotfiles_repo_/_test_dotfile_";
+    # file."_TEST_FILE_".source =  ./_TEST_FILE_.txt;
+
   };
-  programs      = import ../shared/home-manager.programs.nix  { inherit pkgs userDataVolume pubkeyPaths; };
+  programs      = import ../shared/home-manager.programs.nix  { inherit pkgs config userDataVolume pubkeyPaths; };
 };
 
 }

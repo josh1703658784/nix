@@ -30,6 +30,7 @@ nix-homebrew                  = {
 };
 
 # export HOMEBREW_NO_ANALYTICS=1
+# https://nix-darwin.github.io/nix-darwin/manual/#opt-homebrew.enable
 homebrew = {
   brews                   = pkgs.lib.mkForce [ ]; # https://github.com/LnL7/nix-darwin/pull/1329
   # brewPrefix              = "${userHomeDir}/opt/homebrew/bin";
