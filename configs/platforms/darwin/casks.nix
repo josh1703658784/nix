@@ -4,7 +4,7 @@
     args.appdir      = "/Applications";
   }
   {
-    name             = "busycontacts";
+    name             = "busycontacts";     # installs to /Applications
     args.require_sha = false;
   }
   {

@@ -12,7 +12,6 @@
   # };
 nix-homebrew.enable = true;     # installs homebrew
 homebrew.enable     = true;     # enables homebrew integration
-# brew-nix.enable     = true;     # enable nixified brew wrappers
 
 homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
 
