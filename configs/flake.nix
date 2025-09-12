@@ -113,23 +113,23 @@
     nixosConfigurations = {
       orbstack = nixpkgs.lib.nixosSystem {
         specialArgs = {
-          inherit
-          inputs
-          configName
-          username
-          userHomeDir
-          userDataVolume
-          primaryUser
-          system
-          homebrewUser
-          ;
+          inherit inputs system;
+          vars = {
+            inherit
+            configName
+            username
+            userHomeDir
+            userDataVolume
+            primaryUser
+            homebrewUser;
+          };
         };
         # specialArgs = {inherit inputs username userHomeDir;};
         system = "aarch64-linux";
         # system.stateVersion = "25.05";
         modules = [
           home-manager.nixosModules.home-manager
-          hosts/orbstack
+          ./hosts/orbstack
     #       # > Our main nixos configuration file <
           # ./nixos/configuration.nix
           # ./modules/orbstack/configuration.orbstack.nix

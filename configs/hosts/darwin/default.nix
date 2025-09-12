@@ -24,9 +24,9 @@ let
 in
 {
   imports = [
-    ../../modules/darwin/system.nix
-    ../../modules/darwin/homebrew.nix
-    ../../modules/home-manager/home-manager.nix
+    ../../platforms/darwin/system.nix
+    ../../platforms/darwin/homebrew.nix
+    ../../platforms/darwin/home-manager.nix
   ];
 
   nix.enable = false; # false for nix-determinate
