@@ -1,41 +1,37 @@
 [
   {
-    name = "1password";
-    args = { appdir = "/Applications"; };
+    name             = "1password";
+    args.appdir      = "/Applications";
   }
   {
-    name = "little-snitch";
-    args = { appdir = "/Applications"; };
+    name             = "busycontacts";
+    args.require_sha = false;
   }
   {
-    name = "steermouse";
-    args = { appdir = "/Applications"; };
+    name             = "little-snitch";
+    args.appdir      = "/Applications";
   }
   {
-    name = "secretive";
-    args = { appdir = "/Applications"; };
+    name             = "powerphotos";
+    args.require_sha = false;
   }
   {
-    name = "busycontacts";
-    args = { require_sha = false; };
+    name             = "secretive";
+    args.appdir      = "/Applications";
   }
   {
-    name = "powerphotos";
-    args = { require_sha = false; };
+    name             = "steermouse";
+    args.appdir      = "/Applications";
   }
   {
-    name = "suspicious-package";
-    args = { require_sha = false; };
+    name             = "suspicious-package";
+    args.require_sha = false;
+  }
+  {
+    name             = "yate";
+    args.require_sha = false;
   }
 
-  {
-    name = "yate";
-    args = { require_sha = false; };
-  }
-  # {
-  #   name = "tailscale";           # uses installer; installs to /Applications
-  #   args = { no_binaries = false; };
-  # }
   "alfred"
   "appcleaner"
   "blockblock"            # installs to /Applications
