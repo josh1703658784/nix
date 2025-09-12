@@ -64,31 +64,16 @@ nixvim                  = {
 
 ssh            = {
   # see https://github.com/nix-community/home-manager/issues/7266
+    # Host *
   extraConfig    = ''
-    IdentityAgent "~/Library/Group Containers/group.strongbox.mac.mcguill/agent.sock"
-    IdentitiesOnly yes
+    IdentityAgent ~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
   '';
   includes       = ["~/.orbstack/ssh/config"];
   matchBlocks    = {
     "codeberg.org" = {
       hostname       = "codeberg.org";
       user           = "git";
-      identityFile = vars.pubkeyPaths.codeberg;
-    };
-    "deck"         = {
-      hostname       = "192.168.20.145";
-      user           = "deck";
-      identityFile   = vars.pubkeyPaths.deck;
-    };
-    "github"       = {
-      hostname       = "github.com";
-      user           = "git";
-      identityFile   = vars.pubkeyPaths.github;
-    };
-    "gitea"        = {
-      hostname       = "gitea.stonecat-shark.ts.net";
-      user           = "git";
-      identityFile   = vars.pubkeyPaths.gitea;
+      identityFile   = vars.pubkeyPaths.codeberg;
     };
     "nas"          = {
       hostname       = "nas.stonecat-shark.ts.net";

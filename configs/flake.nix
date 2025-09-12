@@ -60,45 +60,24 @@
     , ...
   }:
   let
-    configName     = "mac-nix";
-    username       = "josh";
-    primaryUser    = "josh";
-    homebrewUser   = "admin";
+    vars = {
+      configName     = "mac-nix";
+      username       = "josh";
+      userHomeDir    = "/Users/${vars.username}";
+      userDataVolume = "/Volumes/_DATA_";
+      primaryUser    = "josh";
+      homebrewUser   = "admin";
+    };
     system         = "aarch64-darwin";
-    userDataVolume = "/Volumes/_DATA_";
-    homebrewPrefix = "${userHomeDir}/opt/homebrew";
-    nixConfigDir   = "${userDataVolume}/Developer/nix-configs/etc/nix-darwin";
-    userHomeDir    = "/Users/${username}";
+    # homebrewPrefix = "${vars.userHomeDir}/opt/homebrew";
+    # nixConfigDir   = "${vars.userDataVolume}/Developer/nix-configs/etc/nix-darwin";
     # thisFlakePath = "${userDataVolume}/Developer/nix-configs/configs";
-
-    supportedSystems = [
-      # "x86_64-linux"
-      # "aarch64-linux"
-      "aarch64-darwin"
-    ];
-    # forEachSupportedSystem =
-    # f:
-    # nixpkgs.lib.genAttrs supportedSystems (
-    #   system:
-    #   f {
-    #     pkgs = import nixpkgs { inherit system; };
-    #   }
-    # );
   in
   {
     darwinConfigurations = {
       mac-nix = nix-darwin.lib.darwinSystem {
         specialArgs = {
-          inherit inputs system;
-          vars = {
-            inherit
-            configName
-            username
-            userHomeDir
-            userDataVolume
-            primaryUser
-            homebrewUser;
-          };
+          inherit inputs system vars;
         };
 
         modules = [
@@ -113,26 +92,12 @@
     nixosConfigurations = {
       orbstack = nixpkgs.lib.nixosSystem {
         specialArgs = {
-          inherit inputs system;
-          vars = {
-            inherit
-            configName
-            username
-            userHomeDir
-            userDataVolume
-            primaryUser
-            homebrewUser;
-          };
+          inherit inputs system vars;
         };
-        # specialArgs = {inherit inputs username userHomeDir;};
         system = "aarch64-linux";
-        # system.stateVersion = "25.05";
         modules = [
           home-manager.nixosModules.home-manager
           ./hosts/orbstack
-    #       # > Our main nixos configuration file <
-          # ./nixos/configuration.nix
-          # ./modules/orbstack/configuration.orbstack.nix
         ];
       };
     };

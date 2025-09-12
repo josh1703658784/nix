@@ -11,12 +11,9 @@
 
 let
   pubkeyPaths = {
-    codeberg = "${specialArgs.vars.userHomeDir}/.ssh/codeberg-pubkey";
-    deck     = "${vars.userHomeDir}/.ssh/deck-pubkey";
-    github   = "${vars.userHomeDir}/.ssh/github-pubkey";
-    gitea    = "${vars.userHomeDir}/.ssh/gitea-pubkey";
-    nas      = "${vars.userHomeDir}/.ssh/nas-pubkey";
-    router   = "${vars.userHomeDir}/.ssh/router-pubkey";
+    codeberg = "~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/34f34cab85c3fb77d9c33d4dd85e40de.pub";
+    nas      = "~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/6429b5655e234964c2505eccb9827cd6.pub";
+    router   = "~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/4885fd615d7919d6b615baa5b1306479.pub";
   };
   # thisFlakePath = "${vars.userDataVolume}/Developer/nix-configs/configs";
   vars' = vars // { inherit pubkeyPaths thisFlakePath; };
@@ -34,38 +31,13 @@ home-manager.users."${vars.username}" = { config, vars, ... }: {
     packages      = pkgs.callPackage ./home-manager.packages.nix { inherit pkgs; };
     homeDirectory = builtins.trace vars vars.userHomeDir;
     stateVersion  = "25.05";
-    file = {
-      "${vars.pubkeyPaths.codeberg}" = {
-        enable = true;
-        executable = false;
-        text = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJcPC4M2E6njMrhPCmUk+j4x6SVS14Qi1hS/o/U6ucRW";
-      };
-      "${vars.pubkeyPaths.deck}" = {
-        enable = true;
-        executable = false;
-        text = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF4XlbsAyZeY24ArMNfUaQZNZaOv0U8X8W/gTDXyHDHS";
-      };
-      "${vars.pubkeyPaths.github}" = {
-        enable = true;
-        executable = false;
-        text = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICtUC70woyEkQoRrCWcOHE80Zm/AU1WnHpOFGpLYLz7a";
-      };
-      "${vars.pubkeyPaths.gitea}" = {
-        enable = true;
-        executable = false;
-        text = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINmZBYKHTjyeRpV+EBEXtQs3t4TKL49XNpfNE84dI0SH";
-      };
-      "${vars.pubkeyPaths.nas}" = {
-        enable = true;
-        executable = false;
-        text = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHmYQW1Mzt5+T4CfqufZuO39txTHRWWvLgo0F2PvMvw1";
-      };
-      "${vars.pubkeyPaths.router}" = {
-        enable = true;
-        executable = false;
-        text = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA90frwx2GUhavtkMF7yBw3xZAhTYkAKR7owjsmZtGSt";
-      };
-    };
+    # file = {
+    #   "${vars.pubkeyPaths.codeberg}" = {
+    #     enable = true;
+    #     executable = false;
+    #     text = "ssh-ed25519 ...";
+    #   };
+    # };
 
     file."_DATA_".source = config.lib.file.mkOutOfStoreSymlink "/Volumes/_DATA_";
   };

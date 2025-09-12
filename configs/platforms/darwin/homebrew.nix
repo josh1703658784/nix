@@ -9,7 +9,7 @@
 }:
 
 {
-  # };
+
 nix-homebrew.enable = true;     # installs homebrew
 homebrew.enable     = true;     # enables homebrew integration
 
