@@ -5,6 +5,21 @@
 #   "${bin}" ${@}
 # }
 
+
+function tmpdir(){
+  local -r curr="$(pwd)"
+  local -r tmp="$(mktemp -d)"
+  ln -s "${curr}" "${tmp}/prev"
+  cd "${tmp}"
+}
+
+
+function sudo-admin(){
+  local -r cmd="${@}"
+  local -r curr="$(pwd)"
+  su -m 'admin' -c "cd ${curr}; ${cmd}"
+}
+
 function docker-compose-recreate-log(){
   # local -r service="${@}"
   docker compose up \

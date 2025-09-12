@@ -1,33 +1,35 @@
 {
     system
-  , inputs
-  , pkgs
-  , nixpkgs
-  , lib
   , config
-  , specialArgs
-  , configName
-  , username
-  , primaryUser
-  , userDataVolume
-  , userHomeDir
+  , vars
   , ...
 
 }:
 
 let
+  thisFlakePath = "${vars.userDataVolume}/Developer/nix-configs/configs";
+  # specialArgs = specialArgs // { inherit thisFlakePath; };
+  # builtins.trace
+
+  # vars' = vars // { inherit thisFlakePath; };
+  # specialArgs = specialArgs // { vars = vars'; };
+  # specialArgs = {
+  #   inherit specialArgs;
+  #   vars = {
+  #     inherit vars;
+  #     inherit thisFlakePath;
+  #   };
+  # };
+  # specialArgs = {};
 in
 {
   imports = [
-    { disabledModules = [ "system/applications.nix" ]; }
-    ../../modules/darwin/system.applications.nix
     ../../modules/darwin/system.nix
     ../../modules/darwin/homebrew.nix
-    ../../modules/darwin/software.nix
-    ../../modules/darwin/home-manager.nix
+    ../../modules/home-manager/home-manager.nix
   ];
 
-  nix.enable = false; # nix-determinate overrides this
+  nix.enable = false; # false for nix-determinate
 
   nix.checkConfig = true;
   nix.channel.enable = false;

@@ -3,8 +3,8 @@
 {
 
   imports = [
-    ../../modules/orbstack/configuration.nix
-    ../../modules/orbstack/home-manager.nix
+    ../../modules/nixos/configuration.nix
+    ../../modules/nixos/home-manager.nix
   ];
 
   system.stateVersion = "25.05";

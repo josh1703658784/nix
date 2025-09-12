@@ -1,5 +1,5 @@
 {
-  userDataVolume
+  vars
 }:
 {
   AppleShowAllExtensions          = true;     # show file extensions
@@ -10,7 +10,7 @@
   FXPreferredViewStyle            = "clmv";   # clmv = column view; default finder view
   FXRemoveOldTrashItems           = false;    # let hazel clean the trash; remove items in trash after 30 days
   NewWindowTarget                 = "Other";  # default folder shown in Finder windows
-  NewWindowTargetPath             = "file://${userDataVolume}"; # URI to open when NewWindowTarget is "Other"
+  NewWindowTargetPath             = "file://${vars.userDataVolume}"; # URI to open when NewWindowTarget is "Other"
   ShowExternalHardDrivesOnDesktop = false;    # show external disks on desktop
   ShowHardDrivesOnDesktop         = false;    # show hard disks on desktop
   ShowMountedServersOnDesktop     = false;    # show connected servers on desktop

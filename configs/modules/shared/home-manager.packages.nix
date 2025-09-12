@@ -6,10 +6,15 @@ with pkgs;
   ack
   bat
   # discordo
+  # coreutils
+  coreutils-full
   devbox
   docker-client
   docker-credential-helpers
+  evil-helix
   fzf
+  gnupg
+  # helix
   inetutils
   jq
   meslo-lgs-nf
@@ -22,9 +27,12 @@ with pkgs;
   sipcalc
   shellcheck
   shfmt
+  openssh
   tailspin
   textql
   watch
   wget
   zsh-powerlevel10k
+
+  # nur.repos.nagy.paperify
 ]

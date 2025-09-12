@@ -3,17 +3,16 @@
     inputs
   , config
   , pkgs
-  , primaryUser
-  , userHomeDir
-  , homebrewUser
+  , vars
+  , lib
   , ...
 }:
 
 {
-
+  # };
 nix-homebrew.enable = true;     # installs homebrew
 homebrew.enable     = true;     # enables homebrew integration
-brew-nix.enable     = true;     # enable nixified brew wrappers
+# brew-nix.enable     = true;     # enable nixified brew wrappers
 
 homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
 
@@ -22,10 +21,9 @@ nix-homebrew                  = {
   # https://github.com/zhaofengli/nix-homebrew
   mutableTaps                   = false;
   enableRosetta                 = true;
-  user                          = homebrewUser;
+  user                          = vars.homebrewUser;
   taps                          = {
     "homebrew/homebrew-bundle"    = inputs.homebrew-bundle;
-    "josh/homebrew-pinned"        = inputs.homebrew-pinned;
   };
 };
 
@@ -33,9 +31,11 @@ nix-homebrew                  = {
 # https://nix-darwin.github.io/nix-darwin/manual/#opt-homebrew.enable
 homebrew = {
   brews                   = pkgs.lib.mkForce [ ]; # https://github.com/LnL7/nix-darwin/pull/1329
+  casks                   = import ./casks.nix;
+  masApps                 = import ./mas.nix;
   # brewPrefix              = "${userHomeDir}/opt/homebrew/bin";
-  user                    = homebrewUser;
-  caskArgs.appdir         = "${userHomeDir}/Applications/Homebrew Apps";
+  user                    = vars.homebrewUser;
+  caskArgs.appdir         = "${vars.userHomeDir}/Applications/Homebrew Apps";
   caskArgs.no_binaries    = true;
   caskArgs.require_sha    = true;
   caskArgs.no_quarantine  = false;

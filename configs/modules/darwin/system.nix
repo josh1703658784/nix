@@ -1,14 +1,10 @@
 {
-    username
-  , userHomeDir
-  , primaryUser
-  , userDataVolume
-  , configName
+  vars
   , ...
 }:
 
 {
-  system.primaryUser = primaryUser;
+  system.primaryUser = vars.primaryUser;
 
   programs.tmux.enable      = true;
   programs.direnv.enable    = true;
@@ -33,28 +29,28 @@
   };
 
   users.users = {
-    "${username}" = {
-      home = userHomeDir;
+    "${vars.username}" = {
+      home = vars.userHomeDir;
     };
   };
 
-  networking                      = import macos/networking.nix       { inherit configName; };
-  power                           = import macos/power.nix            {};
-  security                        = import macos/security.nix         {};
-  system.defaults.ActivityMonitor = import macos/activity-monitor.nix {};
-  system.defaults.controlcenter   = import macos/control-center.nix   {};
-  system.defaults.dock            = import macos/dock.nix             { inherit userHomeDir; };
-  system.defaults.finder          = import macos/finder.nix           { inherit userDataVolume; };
-  system.defaults.loginwindow     = import macos/login-window.nix     {};
-  system.defaults.menuExtraClock  = import macos/menu-clock.nix       {};
-  system.defaults.NSGlobalDomain  = import macos/global.nix           {};
-  system.defaults.screencapture   = import macos/screen-capture.nix   { inherit userHomeDir; };
-  system.defaults.smb             = import macos/smb.nix              { inherit configName; };
-  system.defaults.SoftwareUpdate  = import macos/software-update.nix  {};
-  system.defaults.trackpad        = import macos/trackpad.nix         {};
-  system.defaults.WindowManager   = import macos/window-manager.nix   {};
-  system.keyboard                 = import macos/keyboard.nix         {};
-  system.startup                  = import macos/startup.nix          {};
+  networking                      = import system/networking.nix       { inherit vars; };
+  power                           = import system/power.nix            {};
+  security                        = import system/security.nix         {};
+  system.defaults.ActivityMonitor = import system/activity-monitor.nix {};
+  system.defaults.controlcenter   = import system/control-center.nix   {};
+  system.defaults.dock            = import system/dock.nix             { inherit vars; };
+  system.defaults.finder          = import system/finder.nix           { inherit vars; };
+  system.defaults.loginwindow     = import system/login-window.nix     {};
+  system.defaults.menuExtraClock  = import system/menu-clock.nix       {};
+  system.defaults.NSGlobalDomain  = import system/global.nix           {};
+  system.defaults.screencapture   = import system/screen-capture.nix   { inherit vars; };
+  system.defaults.smb             = import system/smb.nix              { inherit vars; };
+  system.defaults.SoftwareUpdate  = import system/software-update.nix  {};
+  system.defaults.trackpad        = import system/trackpad.nix         {};
+  system.defaults.WindowManager   = import system/window-manager.nix   {};
+  system.keyboard                 = import system/keyboard.nix         {};
+  system.startup                  = import system/startup.nix          {};
 
   # disable system LLM
   system.defaults.CustomSystemPreferences."com.apple.CloudSubscriptionFeatures.optIn" = {

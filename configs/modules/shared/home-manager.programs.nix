@@ -8,8 +8,8 @@
 {
     pkgs
   , config
-  , userDataVolume
-  , pubkeyPaths
+  , vars
+  , lib
   , ...
 }:
 
@@ -19,19 +19,33 @@ in
 
 {
 
+  # options.myModule.argA = lib.mkOption {
+  #   type = lib.types.int;
+  # };
+
 home-manager.enable = true;
 
-nixvim.enable       = true;
-direnv.enable       = true;
-docker-cli.enable   = false;
-git.enable          = true;
-nnn.enable          = true;
-skim.enable         = true; # fuzzy search
-ssh.enable          = true;
-tmux.enable         = true;
-zsh.enable          = true;
+nixvim.enable         = true;
+direnv.enable         = true;
+docker-cli.enable     = false;
+git.enable            = true;
+nnn.enable            = true;
+skim.enable           = true; # fuzzy search
+ssh.enable            = true;
+tmux.enable           = true;
+zsh.enable            = true;
+nh.enable             = true;
+password-store.enable = true;
 # nix-search-tv.enable = true; # unstable
 
+password-store.settings = {
+  PASSWORD_STORE_DIR = "/Volumes/_DATA_/.local/share/password-store";
+};
+
+nh = {
+  flake = "/Volumes/_DATA_/Developer/nix-configs/configs"; # builtins.trace vars vars.thisFlakePath;
+  clean.enable = true;
+};
 
 nixvim                  = {
   viAlias                          = true;
@@ -59,37 +73,37 @@ ssh            = {
     "codeberg.org" = {
       hostname       = "codeberg.org";
       user           = "git";
-      identityFile = pubkeyPaths.codeberg;
+      identityFile = vars.pubkeyPaths.codeberg;
     };
     "deck"         = {
       hostname       = "192.168.20.145";
       user           = "deck";
-      identityFile   = pubkeyPaths.deck;
+      identityFile   = vars.pubkeyPaths.deck;
     };
     "github"       = {
       hostname       = "github.com";
       user           = "git";
-      identityFile   = pubkeyPaths.github;
+      identityFile   = vars.pubkeyPaths.github;
     };
     "gitea"        = {
       hostname       = "gitea.stonecat-shark.ts.net";
       user           = "git";
-      identityFile   = pubkeyPaths.gitea;
+      identityFile   = vars.pubkeyPaths.gitea;
     };
     "nas"          = {
       hostname       = "nas.stonecat-shark.ts.net";
       user           = "freon";
-      identityFile   = pubkeyPaths.nas;
+      identityFile   = vars.pubkeyPaths.nas;
     };
     "nas.local"    = {
       hostname       = "192.168.10.34";
       user           = "freon";
-      identityFile   = pubkeyPaths.nas;
+      identityFile   = vars.pubkeyPaths.nas;
     };
     "router"       = {
       hostname       = "192.168.10.1";
       user           = "user00";
-      identityFile   = pubkeyPaths.router;
+      identityFile   = vars.pubkeyPaths.router;
     };
   };
 };
@@ -170,10 +184,10 @@ zsh = {
   ];
   dirHashes = {
     _                        = "_DATA_";
-    nix-config               = "${userDataVolume}/Developer/nix-configs";
-    homelab-docker           = "${userDataVolume}/Developer/homelab-docker";
-    homelab-docker-media     = "${userDataVolume}/Developer/homelab-docker/compose/media";
-    homelab-docker-utilities = "${userDataVolume}/Developer/homelab-docker/compose/utilities";
+    nix-config               = "${vars.userDataVolume}/Developer/nix-configs";
+    homelab-docker           = "${vars.userDataVolume}/Developer/homelab-docker";
+    homelab-docker-media     = "${vars.userDataVolume}/Developer/homelab-docker/compose/media";
+    homelab-docker-utilities = "${vars.userDataVolume}/Developer/homelab-docker/compose/utilities";
     repositories             = "${config.home.homeDirectory}/_DATA_/Developer";
   };
   shellAliases = {
@@ -185,8 +199,8 @@ zsh = {
     g            = "git";
     ll           = "ls -la";
     l            = "ls -la";
-    switch       = "su - admin -c 'sudo darwin-rebuild switch --flake \"${userDataVolume}/Developer/nix-configs/configs\"'";
-    switch-v      = "su - admin -c 'sudo darwin-rebuild switch --show-trace -vvvvv --show-trace --flake \"${userDataVolume}/Developer/nix-configs/configs\"'";
+    switch       = "su - admin -c 'sudo darwin-rebuild switch --flake \"${vars.userDataVolume}/Developer/nix-configs/configs\"'";
+    switch-v      = "su - admin -c 'sudo darwin-rebuild switch --show-trace -vvvvv --show-trace --flake \"${vars.userDataVolume}/Developer/nix-configs/configs\"'";
     diff         = "ksdiff";
     # tailscale    = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
     ts           = "tailscale";
@@ -197,6 +211,8 @@ zsh = {
     dcu          = "docker compose up -d";
     dcul         = "docker-compose-up-d-log-colorize";
     sc           = "shellcheck";
+    admin        = "sudo-admin";
+    tmpdir       = "cd \"$(mktemp -d)\"";
 
     # https://github.com/3timeslazy/nix-search-tv?tab=readme-ov-file#fzf
     nix-search   = "nix-search-tv print | fzf --preview 'nix-search-tv preview {}' --scheme history";

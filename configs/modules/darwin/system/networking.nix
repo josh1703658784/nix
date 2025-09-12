@@ -1,9 +1,9 @@
-{ configName }:
+{ vars }:
 {
   # https://mynixos.com/nix-darwin/options/networking
-  computerName               = configName;
-  hostName                   = configName;
-  localHostName              = configName;
+  computerName               = vars.configName;
+  hostName                   = vars.configName;
+  localHostName              = vars.configName;
   wakeOnLan.enable           = false;
   # knownNetworkServices = [
   #   "Thunderbolt Bridge"
