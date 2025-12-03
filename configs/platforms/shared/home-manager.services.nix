@@ -18,7 +18,5 @@ let
 in
 
 {
-gpg-agent.enable = true;
-
 
 }

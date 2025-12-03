@@ -19,24 +19,22 @@ in
 
 {
 
-  # options.myModule.argA = lib.mkOption {
-  #   type = lib.types.int;
-  # };
-
-home-manager.enable = true;
+home-manager.enable   = true;
 
 nixvim.enable         = true;
 direnv.enable         = true;
 docker-cli.enable     = false;
 git.enable            = true;
+# helix.enable          = true;
+# java.enable           = true;
 nnn.enable            = true;
 skim.enable           = true; # fuzzy search
 ssh.enable            = true;
 tmux.enable           = true;
 zsh.enable            = true;
 nh.enable             = true;
-password-store.enable = true;
-# nix-search-tv.enable = true; # unstable
+password-store.enable = false;
+# nix-search-tv.enable = true; # branch:unstable
 
 password-store.settings = {
   PASSWORD_STORE_DIR = "/Volumes/_DATA_/.local/share/password-store";
@@ -65,9 +63,16 @@ nixvim                  = {
 ssh            = {
   # see https://github.com/nix-community/home-manager/issues/7266
     # Host *
+  # extraConfig    = ''
+  #   IdentityAgent ~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+  # '';
   extraConfig    = ''
-    IdentityAgent ~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+     IdentityAgent "~/Library/Group Containers/group.strongbox.mac.mcguill/agent.sock"
   '';
+  # controlMaster   = "auto";
+  # controlPath     = "~/.ssh/sockets/%r@%h-%p";
+  # controlPersist  = "10m";
+
   includes       = ["~/.orbstack/ssh/config"];
   matchBlocks    = {
     "codeberg.org" = {
@@ -79,7 +84,7 @@ ssh            = {
       hostname       = "nas.stonecat-shark.ts.net";
       user           = "freon";
       identityFile   = vars.pubkeyPaths.nas;
-    };
+   };
     "nas.local"    = {
       hostname       = "192.168.10.34";
       user           = "freon";
@@ -132,37 +137,33 @@ zsh = {
   autosuggestion.enable = true;
   plugins = [
     {
-      name = "vi-mode";
-      src = pkgs.zsh-vi-mode;
-      file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
-    }
-    {
-      name = "zsh-powerlevel10k";
-      src = "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/";
-      file = "powerlevel10k.zsh-theme";
-    }
-    {
-      name = "powerlevel10k-config";
-      src = ./config/zsh-powerlevel10k;
-      file = "p10k.zsh";
-    }
-    {
-      name = "dracula/zsh";
-      file = "dracula.zsh-theme";
-      src = pkgs.fetchFromGitHub {
-        owner = "dracula";
-        repo = "zsh";
-        rev = "75ea3f5e1055291caf56b4aea6a5d58d00541c41";
+      name   = "vi-mode";
+      src    = pkgs.zsh-vi-mode;
+      file   = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
+    }    {
+      name   = "zsh-powerlevel10k";
+      src    = "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/";
+      file   = "powerlevel10k.zsh-theme";
+    }    {
+      name   = "powerlevel10k-config";
+      src    = ./config/zsh-powerlevel10k;
+      file   = "p10k.zsh";
+    }    {
+      name   = "dracula/zsh";
+      file   = "dracula.zsh-theme";
+      src    = pkgs.fetchFromGitHub {
+        owner  = "dracula";
+        repo   = "zsh";
+        rev    = "75ea3f5e1055291caf56b4aea6a5d58d00541c41";
         sha256 = "sha256-TuKC1wPdq2OtEeViwnAmitpdaanyXHJmBcqV+rHxy34=";
       };
-    }
-    {
-      name = "dracula/zsh-syntax-highlighting";
-      file = "zsh-syntax-highlighting.sh";
-      src = pkgs.fetchFromGitHub {
-        owner = "dracula";
-        repo = "zsh-syntax-highlighting";
-        rev = "09c89b657ad8a27ddfe1d6f2162e99e5cce0d5b3";
+    }    {
+      name   = "dracula/zsh-syntax-highlighting";
+      file   = "zsh-syntax-highlighting.sh";
+      src    = pkgs.fetchFromGitHub {
+        owner  = "dracula";
+        repo   = "zsh-syntax-highlighting";
+        rev    = "09c89b657ad8a27ddfe1d6f2162e99e5cce0d5b3";
         sha256 = "sha256-JrSKx8qHGAF0DnSJiuKWvn6ItQHvWpJ5pKo4yNbrHno=";
       };
     }

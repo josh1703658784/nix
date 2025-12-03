@@ -37,7 +37,7 @@ home-manager.users."${vars.username}" = { config, vars, ... }: {
   home          = {
     packages      = pkgs.callPackage ../shared/home-manager.packages.nix { inherit pkgs; };
     # homeDirectory = lib.mkForce userHomeDir;
-    stateVersion  = "25.05";
+    stateVersion  = "25.05"; # @@ DO NOT MODIFY @@
   };
   programs      = import ../shared/home-manager.programs.nix  { inherit pkgs config vars lib; };
 };

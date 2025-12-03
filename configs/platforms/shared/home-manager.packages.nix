@@ -16,10 +16,12 @@ with pkgs;
   gnupg
   # helix
   inetutils
+  i2pd
   jq
   meslo-lgs-nf
   nix-search-cli
   nix-search-tv # https://github.com/3timeslazy/nix-search-tv
+  pwgen
   rclone
   rig
   rsync

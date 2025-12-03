@@ -25,7 +25,7 @@ in
 {
   imports = [
     ../../platforms/darwin/system.nix
-    ../../platforms/darwin/homebrew.nix
+    ../../platforms/darwin/brew.nix
     ../../platforms/darwin/home-manager.nix
   ];
 

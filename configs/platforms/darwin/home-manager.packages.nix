@@ -8,4 +8,6 @@ in
 shared-packages ++ [
   chezmoi
   dockutil # Manage icons in the dock
+  xquartz
+  blueutil
 ]

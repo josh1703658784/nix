@@ -57,4 +57,7 @@
     # https://macos-defaults.com/misc/apple-intelligence.html#toggle-apple-intelligence
     "545129924" = "false";
   };
+  system.defaults.CustomUserPreferences."com.lowtechguys.MusicDecoy" = {
+    "mediaAppPath" = "${vars.userHomeDir}/Applications/Homebrew Apps/Swinsian.app";
+  };
 }

@@ -38,6 +38,11 @@
       flake                     = false;
     };
 
+    homebrew-aerospace           = {
+      url                       = "github:nikitabobko/homebrew-tap";
+      flake                     = false;
+    };
+
     ###############################
     # MISC \_/-\_/-\_/-\_/-\_/-\_/-
     ###############################
@@ -61,7 +66,7 @@
   }:
   let
     vars = {
-      configName     = "mac-nix";
+      configName     = "macbook";
       username       = "josh";
       userHomeDir    = "/Users/${vars.username}";
       userDataVolume = "/Volumes/_DATA_";
@@ -75,7 +80,7 @@
   in
   {
     darwinConfigurations = {
-      mac-nix = nix-darwin.lib.darwinSystem {
+      macbook = nix-darwin.lib.darwinSystem {
         specialArgs = {
           inherit inputs system vars;
         };
@@ -84,12 +89,13 @@
           nix-homebrew.darwinModules.nix-homebrew
           home-manager.darwinModules.home-manager
           nur.modules.darwin.default
-          ./hosts/darwin
+          ./hosts/macbook
         ];
       };
     };
 
     nixosConfigurations = {
+
       orbstack = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs system vars;
@@ -100,6 +106,20 @@
           ./hosts/orbstack
         ];
       };
+
+      utm = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit inputs system vars;
+        };
+        system = "aarch64-linux";
+        modules = [
+          home-manager.nixosModules.home-manager
+          ./hosts/utm
+        ];
+      };
+
+
+
     };
   };
 }
