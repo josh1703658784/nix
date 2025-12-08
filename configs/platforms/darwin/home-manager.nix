@@ -32,13 +32,19 @@ home-manager.users."${vars.username}" = { config, vars, ... }: {
     packages      = pkgs.callPackage ./home-manager.packages.nix { inherit pkgs; };
     homeDirectory = builtins.trace vars vars.userHomeDir;
     stateVersion  = "25.05";
-    # file = {
-    #   "${vars.pubkeyPaths.codeberg}" = {
-    #     enable = true;
-    #     executable = false;
-    #     text = "ssh-ed25519 ...";
-    #   };
-    # };
+    file = {
+      "mackup.cfg" = {
+        enable = true;
+        source = ./home.file/mackup.cfg;
+        target = ".mackup.cfg";
+      };
+      "mackup" = {
+        enable    = true;
+        source    = ./home.file/mackup;
+        recursive = true;
+        target    = ".mackup";
+      };
+    };
 
     file."_DATA_".source = config.lib.file.mkOutOfStoreSymlink "/Volumes/_DATA_";
   };
