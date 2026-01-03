@@ -60,4 +60,8 @@
   system.defaults.CustomUserPreferences."com.lowtechguys.MusicDecoy" = {
     "mediaAppPath" = "${vars.userHomeDir}/Applications/Homebrew Apps/Swinsian.app";
   };
+
+  # https://binarynights.com/manual#fileviewer
+  # defaults write -g NSFileViewer -string com.binarynights.ForkLift;
+  # defaults write com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers -array-add '{LSHandlerContentType="public.folder";LSHandlerRoleAll="com.binarynights.ForkLift";}'
 }
