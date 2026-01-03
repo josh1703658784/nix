@@ -15,32 +15,40 @@
     name             = "little-snitch";
     args.appdir      = "/Applications";
   }
-  {
-    name             = "mailmate@beta";
-    args.require_sha = false;
-  }
+  # {
+  #   name             = "mailmate@beta";
+  #   args.require_sha = false;
+  # }
   {
     name             = "powerphotos";
     args.require_sha = false;
   }
-  {
-    name             = "secretive";
-    args.appdir      = "/Applications";
-  }
+  # {
+  #   name             = "scrolla";
+  #   args.require_sha = false;
+  # }
+  # {
+  #   name             = "secretive";
+  #   args.appdir      = "/Applications";
+  # }
   {
     name             = "steermouse";
     args.appdir      = "/Applications";
   }
+  # {
+  #   name             = "witch";
+  #   args.appdir      = "/Applications";
+  # }
+  # {
+  #   name             = "suspicious-package";
+  #   args.require_sha = false;
+  # }
   {
-    name             = "witch";
-    args.appdir      = "/Applications";
-  }
-  {
-    name             = "suspicious-package";
+    name             = "quitter";
     args.require_sha = false;
   }
   # {
-  #   name             = "quitter";
+  #   name             = "wooshy";
   #   args.require_sha = false;
   # }
   # {
@@ -52,14 +60,13 @@
   "alfred"
   "alt-tab"
   "appcleaner"
-  "app-tamer"
+  # "app-tamer"
   # "arq"
   "blockblock"            # installs to /Applications
   "boop"
   "busycal"
   # "cocoapacketanalyzer"
   # "clop"
-  "contexts"
   # "cardhop"
   "coteditor"
   "devonthink@3"
@@ -70,6 +77,7 @@
   "fork"
   "forklift"
   # "fsnotes"
+  # "ghostty"
   # "halloy"
   "hazel"
   "hiddenbar"
@@ -79,28 +87,31 @@
   "iina"
   "imageoptim"
   "iterm2"
-  # "jordanbaird-ice"
+  # "jordanbaird-ice" # high cpu
   "kaleidoscope@3"
   # "keepassxc"
   "kextviewr"
+  "keyboard-maestro"
   "knockknock"
   # "macpass"
   "marta"
-  "meta"
+  # "meta"
+  # "mouseless"
   "mp3tag"
   "music-decoy"
   # "mullvad-browser"
-  "netiquette"
+  # "netiquette"
   "netnewswire"
   "nova"
   # "omnifocus"
   "orbstack"
   "orion"
-  "paletro"
+  # "paletro"
   # "proxyman"
   # "qbittorrent"
   "sf-symbols"            # installs to /Applications
   "shottr"
+  # "sigmaos"
   "signal"
   "swinsian"
   "syncthing-app"
