@@ -18,6 +18,7 @@ with pkgs;
   inetutils
   i2pd
   jq
+  # mackup
   meslo-lgs-nf
   nix-search-cli
   nix-search-tv # https://github.com/3timeslazy/nix-search-tv
