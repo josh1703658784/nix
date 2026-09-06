@@ -16,10 +16,10 @@ let
   pubkeyPaths = {
     codeberg = "${specialArgs.vars.userHomeDir}/.ssh/codeberg-pubkey";
     deck     = "${vars.userHomeDir}/.ssh/deck-pubkey";
-    github   = "${vars.userHomeDir}/.ssh/github-pubkey";
     gitea    = "${vars.userHomeDir}/.ssh/gitea-pubkey";
     nas      = "${vars.userHomeDir}/.ssh/nas-pubkey";
     router   = "${vars.userHomeDir}/.ssh/router-pubkey";
+    github   = "${vars.userHomeDir}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/dd13d0088ae44d603805c3d6ece7ac36.pub";
   };
   # thisFlakePath = "${vars.userDataVolume}/Developer/nix-configs/configs";
   vars' = vars // { inherit pubkeyPaths; };

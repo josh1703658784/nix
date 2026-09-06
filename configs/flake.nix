@@ -1,55 +1,48 @@
 {
   inputs = {
-    nixpkgs.url               = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
-    # nixpkgs-unstable.url      = "github:nixos/nixpkgs/nixos-unstable";
-    nur = {
-      url = "github:nix-community/NUR/26af345a615eb8739a0ee9f98822e8b11a188821";
+    nixpkgs.url            = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
+    nur                    = {
+      url                    = "github:nix-community/NUR/26af345a615eb8739a0ee9f98822e8b11a188821";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nix-darwin                = {
+    nix-darwin             = {
       # https://github.com/nix-darwin/nix-darwin
-      url                       = "github:LnL7/nix-darwin/nix-darwin-25.05";
-      inputs.nixpkgs.follows    = "nixpkgs";
+      url                    = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
+      # url                  = "github:LnL7/nix-darwin/nix-darwin-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    home-manager              = {
+    home-manager           = {
       # https://github.com/nix-community/home-manager
-      url                       = "github:nix-community/home-manager/release-25.05";
-      inputs.nixpkgs.follows    = "nixpkgs";
+      url                    = "github:nix-community/home-manager/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     ###############################
     ## HOMEBREW \_/-\_/-\_/-\_/-\_/
     ###############################
     # https://github.com/zhaofengli/nix-homebrew
-    nix-homebrew.url          = "github:zhaofengli/nix-homebrew";
+    nix-homebrew.url       = "github:zhaofengli/nix-homebrew";
 
-    homebrew-cask             = {
+    homebrew-cask          = {
       # https://github.com/zhaofengli/nix-homebrew
-      url                       = "github:homebrew/homebrew-cask";
-      flake                     = false;
+      url                    = "github:homebrew/homebrew-cask";
+      flake                  = false;
     };
 
-    homebrew-bundle           = {
+    homebrew-bundle        = {
       # https://github.com/zhaofengli/nix-homebrew
       # https://github.com/zhaofengli/nix-homebrew/issues/9#issuecomment-1774684583
-      url                       = "github:homebrew/homebrew-bundle";
-      flake                     = false;
-    };
-
-    homebrew-aerospace           = {
-      url                       = "github:nikitabobko/homebrew-tap";
-      flake                     = false;
+      url                    = "github:homebrew/homebrew-bundle";
+      flake                  = false;
     };
 
     ###############################
     # MISC \_/-\_/-\_/-\_/-\_/-\_/-
     ###############################
-    nixvim                    = {
+    nixvim                 = {
       # https://github.com/nix-community/nixvim
-      url                       = "github:nix-community/nixvim/nixos-25.05";
-      inputs.nixpkgs.follows    = "nixpkgs";
+      url                    = "github:nix-community/nixvim/nixos-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
   };
@@ -79,6 +72,16 @@
     # thisFlakePath = "${userDataVolume}/Developer/nix-configs/configs";
   in
   {
+    # https://lix.systems/add-to-config/
+    nix.package = nixpkgs.lixPackageSets.stable.lix;
+    nixpkgs.overlays = [ (final: prev: {
+      inherit (prev.lixPackageSets.stable)
+        nixpkgs-review
+        nix-eval-jobs
+        nix-fast-build
+        colmena;
+    }) ];
+
     darwinConfigurations = {
       macbook = nix-darwin.lib.darwinSystem {
         specialArgs = {
@@ -96,7 +99,7 @@
 
     nixosConfigurations = {
 
-      orbstack = nixpkgs.lib.nixosSystem {
+      orb-nix = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs system vars;
         };
@@ -107,16 +110,16 @@
         ];
       };
 
-      utm = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit inputs system vars;
-        };
-        system = "aarch64-linux";
-        modules = [
-          home-manager.nixosModules.home-manager
-          ./hosts/utm
-        ];
-      };
+      # utm = nixpkgs.lib.nixosSystem {
+      #   specialArgs = {
+      #     inherit inputs system vars;
+      #   };
+      #   system = "aarch64-linux";
+      #   modules = [
+      #     home-manager.nixosModules.home-manager
+      #     ./hosts/utm
+      #   ];
+      # };
 
 
 

@@ -23,7 +23,7 @@ nix-homebrew                  = {
   user                          = vars.homebrewUser;
   taps                          = {
     "homebrew/homebrew-bundle"  = inputs.homebrew-bundle;
-    "nikitabobko/homebrew-tap"  = inputs.homebrew-aerospace;
+    # "nikitabobko/homebrew-tap"  = inputs.homebrew-aerospace;
   };
 };
 
@@ -32,7 +32,7 @@ nix-homebrew                  = {
 homebrew = {
   brews                   = pkgs.lib.mkForce [ "mackup" ]; # https://github.com/LnL7/nix-darwin/pull/1329
   casks                   = import ./brew.casks.nix;
-  masApps                 = import ./brew.mas.nix;
+  # masApps                 = import ./brew.mas.nix;
   # brewPrefix              = "${userHomeDir}/opt/homebrew/bin";
   user                    = vars.homebrewUser;
   caskArgs.appdir         = "${vars.userHomeDir}/Applications/Homebrew Apps";

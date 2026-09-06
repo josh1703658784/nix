@@ -11,6 +11,18 @@
   programs.man.enable       = true;
   programs.nix-index.enable = false;
 
+  programs.zsh         = {
+    # patches "Ignore insecure directories and files and continue [y] or abort compinit [n]?"
+    # due to nix-darwin not properly supporting multi-user installs
+    enableBashCompletion = false;
+    enableCompletion     = false;
+    enableGlobalCompInit = false;
+    # enableSyntaxHighlighting = true;
+    enableFastSyntaxHighlighting = true;
+  };
+
+
+
   programs.tmux = {
     enableMouse   = true;
     enableVim     = true;

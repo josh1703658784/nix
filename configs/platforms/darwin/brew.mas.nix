@@ -1,13 +1,14 @@
 {
-  "1blocker"                = 1365531024;
+  # "1blocker"                = 1365531024;
   "actions"                 = 1586435171;
   "amphetamine"             = 937984704;
   "anybox"                  = 1593408455;
   "apple configurator"      = 1037126344;
-  "autostarter"             = 6444444273;
+  # "autostarter"             = 6444444273;
   # "banktivity"              = 1480779512;
   # "beagleim"                = 1445349494;
   "bear"                    = 1091189122;
+  "coteditor"               = 102464065012;
   # "dnsecure"                = 1533413232;
   "goodlinks"               = 1474335294;
   "history book"            = 1619241039;
@@ -16,12 +17,13 @@
   "infuse"                  = 1136220934;
   # "js blocker"              = 6661025087;
   "kagi for safari"         = 1622835804;
-  # "keepassium"              = 1435127111;
-  "mapper"                  = 1589391989;
+  "keepassium"              = 1435127111;
+  # "mapper"                  = 1589391989;
+  "boop"                     = 1518425043;
   "mela"                    = 1568924476;
   "monodraw"                = 920404675;
   "musicharbor"             = 1440405750;
-  "noir"                    = 1592917505;
+  # "noir"                    = 1592917505;
   "numbers"                 = 409203825;
   "ok json"                 = 1576121509;
   "pages"                   = 409201541;
@@ -32,7 +34,7 @@
   # "pushover"                = 506088175;
   "redirect web for safari" = 1571283503;
   # "rippple"                 = 1309894528;
-  "shortery"                = 1594183810;
+  # "shortery"                = 1594183810;
   # "singlefile"              = 6444322545;
   "soulver 3"               = 1508732804;
   "stopthefonts"            = 1671452642;
@@ -42,8 +44,9 @@
   # "toothfairy"              = 1191449274;
   "tot"                     = 1491071483;
   "utm"                     = 1538878817;
-  # "wifi explorer"           = 494803304;
+  "wifi explorer"           = 494803304;
   "xcode"                   = 497799835;
+  "yubico-authenticator"    = 1497506650;
   # "pushover"                = 506088175;
   # "singlefile"              = 6444322545;
   # "strongbox"               = 1481853033;

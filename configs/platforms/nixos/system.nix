@@ -12,7 +12,7 @@
   security.sudo.wheelNeedsPassword   = false;
 
   users.users.josh = {
-    uid              = 502;
+    uid              = 501;
     extraGroups      = [ "wheel" "orbstack" ];
 
     # simulate isNormalUser, but with an arbitrary UID
@@ -22,7 +22,10 @@
     home             = "/home/josh";
     homeMode         = "700";
     useDefaultShell  = true;
+    # defaultUserShell = "zsh";
+    shell = pkgs.zsh;
   };
+  programs.zsh.enable = true;
 
   networking        = {
     dhcpcd.enable     = false;

@@ -7,10 +7,10 @@
     name             = "busycontacts";     # installs to /Applications
     args.require_sha = false;
   }
-  {
-    name             = "kindavim";
-    args.require_sha = false;
-  }
+  # {
+  #   name             = "kindavim";
+  #   args.require_sha = false;
+  # }
   {
     name             = "little-snitch";
     args.appdir      = "/Applications";
@@ -27,10 +27,10 @@
   #   name             = "scrolla";
   #   args.require_sha = false;
   # }
-  # {
-  #   name             = "secretive";
-  #   args.appdir      = "/Applications";
-  # }
+  {
+    name             = "secretive";
+    args.appdir      = "/Applications";
+  }
   {
     name             = "steermouse";
     args.appdir      = "/Applications";
@@ -43,10 +43,10 @@
   #   name             = "suspicious-package";
   #   args.require_sha = false;
   # }
-  {
-    name             = "quitter";
-    args.require_sha = false;
-  }
+  # {
+  #   name             = "quitter";
+  #   args.require_sha = false;
+  # }
   # {
   #   name             = "wooshy";
   #   args.require_sha = false;
@@ -58,32 +58,33 @@
 
   # "aerospace"
   "alfred"
-  "alt-tab"
+  # "alt-tab"
   "appcleaner"
   # "app-tamer"
   # "arq"
   "blockblock"            # installs to /Applications
-  "boop"
+  # "boop"
   "busycal"
   # "cocoapacketanalyzer"
   # "clop"
   # "cardhop"
-  "coteditor"
+  # "coteditor"
   "devonthink@3"
   "dhs"
   # "eaglefiler"
   "exactscan"
   "firefox"
   "fork"
-  "forklift"
+  # "forklift"
   # "fsnotes"
   # "ghostty"
   # "halloy"
-  "hazel"
+  # "hazel"
   "hiddenbar"
   # "historyhound"
-  "homerow"
+  # "homerow"
   "hookmark"
+  "hyperkey"
   "iina"
   "imageoptim"
   "iterm2"
@@ -91,15 +92,17 @@
   "kaleidoscope@3"
   # "keepassxc"
   "kextviewr"
-  "keyboard-maestro"
+  # "keyboard-maestro"
   "knockknock"
+  # "lockrattler"
   # "macpass"
   "marta"
   # "meta"
   # "mouseless"
   "mp3tag"
-  "music-decoy"
+  # "music-decoy"
   # "mullvad-browser"
+  # "nheko"
   # "netiquette"
   "netnewswire"
   "nova"
@@ -109,10 +112,14 @@
   # "paletro"
   # "proxyman"
   # "qbittorrent"
+  "ransomwhere"
+  # "raycast"
   "sf-symbols"            # installs to /Applications
   "shottr"
   # "sigmaos"
   "signal"
+  "silentknight"
+  "skint"
   "swinsian"
   "syncthing-app"
   # "tableplus"
@@ -120,8 +127,10 @@
   "textual"
   "thingsmacsandboxhelper"
   "tor-browser"
+  "transmit"
+  "virtualbuddy"
   # "witch"
   # "xld"
-  "yattee"
-  "yubico-authenticator"
+  # "yattee"
+  # "yubico-authenticator"
 ]

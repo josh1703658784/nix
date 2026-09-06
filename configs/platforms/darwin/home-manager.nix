@@ -12,8 +12,7 @@
 let
   pubkeyPaths = {
     codeberg = "~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/34f34cab85c3fb77d9c33d4dd85e40de.pub";
-    # nas      = "~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/6429b5655e234964c2505eccb9827cd6.pub";
-    nas      = "~/.ssh/nas.pub";
+    nas      = "~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/6a69e2933f4ee0511f611ece0b3879e6.pub";
     router   = "~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/4885fd615d7919d6b615baa5b1306479.pub";
   };
   # thisFlakePath = "${vars.userDataVolume}/Developer/nix-configs/configs";
