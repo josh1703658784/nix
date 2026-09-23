@@ -1,50 +1,15 @@
 {
   inputs = {
-    nixpkgs.url            = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
-    nur                    = {
-      url                    = "github:nix-community/NUR/26af345a615eb8739a0ee9f98822e8b11a188821";
+    nixpkgs.url  = "github:NixOS/nixpkgs/nixos-26.05";
+    nixvim.url   = "github:nix-community/nixvim/nixos-26.05"; # https://github.com/nix-community/nixvim
+
+    nix-search-tv         = { # https://github.com/3timeslazy/nix-search-tv
+      url                 = "github:MarSoft/nix-search-tv/fix-homemanager";
+    };
+    home-manager              = { # https://github.com/nix-community/home-manager
+      url                    = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-darwin             = {
-      # https://github.com/nix-darwin/nix-darwin
-      url                    = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
-      # url                  = "github:LnL7/nix-darwin/nix-darwin-25.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    home-manager           = {
-      # https://github.com/nix-community/home-manager
-      url                    = "github:nix-community/home-manager/release-25.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    ###############################
-    ## HOMEBREW \_/-\_/-\_/-\_/-\_/
-    ###############################
-    # https://github.com/zhaofengli/nix-homebrew
-    nix-homebrew.url       = "github:zhaofengli/nix-homebrew";
-
-    homebrew-cask          = {
-      # https://github.com/zhaofengli/nix-homebrew
-      url                    = "github:homebrew/homebrew-cask";
-      flake                  = false;
-    };
-
-    homebrew-bundle        = {
-      # https://github.com/zhaofengli/nix-homebrew
-      # https://github.com/zhaofengli/nix-homebrew/issues/9#issuecomment-1774684583
-      url                    = "github:homebrew/homebrew-bundle";
-      flake                  = false;
-    };
-
-    ###############################
-    # MISC \_/-\_/-\_/-\_/-\_/-\_/-
-    ###############################
-    nixvim                 = {
-      # https://github.com/nix-community/nixvim
-      url                    = "github:nix-community/nixvim/nixos-25.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
   };
 
   outputs = inputs@{
@@ -52,9 +17,7 @@
     , nixpkgs
     , home-manager
     , nixvim
-    , nix-homebrew
-    , nix-darwin
-    , nur
+    , nix-search-tv
     , ...
   }:
   let
@@ -63,66 +26,28 @@
       username       = "josh";
       userHomeDir    = "/Users/${vars.username}";
       userDataVolume = "/Volumes/_DATA_";
-      primaryUser    = "josh";
-      homebrewUser   = "admin";
     };
-    system         = "aarch64-darwin";
-    # homebrewPrefix = "${vars.userHomeDir}/opt/homebrew";
-    # nixConfigDir   = "${vars.userDataVolume}/Developer/nix-configs/etc/nix-darwin";
-    # thisFlakePath = "${userDataVolume}/Developer/nix-configs/configs";
   in
   {
-    # https://lix.systems/add-to-config/
-    nix.package = nixpkgs.lixPackageSets.stable.lix;
-    nixpkgs.overlays = [ (final: prev: {
-      inherit (prev.lixPackageSets.stable)
-        nixpkgs-review
-        nix-eval-jobs
-        nix-fast-build
-        colmena;
-    }) ];
-
-    darwinConfigurations = {
-      macbook = nix-darwin.lib.darwinSystem {
-        specialArgs = {
-          inherit inputs system vars;
-        };
-
-        modules = [
-          nix-homebrew.darwinModules.nix-homebrew
-          home-manager.darwinModules.home-manager
-          nur.modules.darwin.default
-          ./hosts/macbook
-        ];
-      };
-    };
 
     nixosConfigurations = {
-
-      orb-nix = nixpkgs.lib.nixosSystem {
+      "nix" = nixpkgs.lib.nixosSystem {
         specialArgs = {
-          inherit inputs system vars;
+          inherit inputs vars;
         };
         system = "aarch64-linux";
         modules = [
+          {
+            environment.systemPackages = [
+              inputs.nix-search-tv.packages.x86_64-linux.default
+              # inputs.nix-search-tv.packages.${pkgs.system}.default
+              # inputs.nix-search-tv.packages.${stdenv.hostPlatform.system}.default
+            ];
+          }
           home-manager.nixosModules.home-manager
           ./hosts/orbstack
         ];
       };
-
-      # utm = nixpkgs.lib.nixosSystem {
-      #   specialArgs = {
-      #     inherit inputs system vars;
-      #   };
-      #   system = "aarch64-linux";
-      #   modules = [
-      #     home-manager.nixosModules.home-manager
-      #     ./hosts/utm
-      #   ];
-      # };
-
-
-
     };
   };
 }

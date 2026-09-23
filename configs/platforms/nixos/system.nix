@@ -2,7 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, modulesPath, ... }:
+{   config
+  , pkgs
+  , modulesPath
+  , vars
+  , ...
+}:
 
 {
   # imports                          = [];
@@ -14,12 +19,10 @@
   users.users.josh = {
     uid              = 501;
     extraGroups      = [ "wheel" "orbstack" ];
-
-    # simulate isNormalUser, but with an arbitrary UID
     isSystemUser     = true;
     group            = "users";
     createHome       = true;
-    home             = "/home/josh";
+    home             = "/home/${vars.username}";
     homeMode         = "700";
     useDefaultShell  = true;
     # defaultUserShell = "zsh";
@@ -27,6 +30,7 @@
   };
   programs.zsh.enable = true;
 
+  networking.resolvconf.enable = false;
   networking        = {
     dhcpcd.enable     = false;
     useDHCP           = false;

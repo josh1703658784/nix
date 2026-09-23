@@ -4,41 +4,29 @@
   , lib
   , pkgs
   , specialArgs
-  # , userDataVolume
-  # , userHomeDir
-  # , home-manager
-  # , username
   , vars
   , ...
 }:
 
 let
   pubkeyPaths = {
-    codeberg = "${specialArgs.vars.userHomeDir}/.ssh/codeberg-pubkey";
-    deck     = "${vars.userHomeDir}/.ssh/deck-pubkey";
-    gitea    = "${vars.userHomeDir}/.ssh/gitea-pubkey";
-    nas      = "${vars.userHomeDir}/.ssh/nas-pubkey";
-    router   = "${vars.userHomeDir}/.ssh/router-pubkey";
-    github   = "${vars.userHomeDir}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/dd13d0088ae44d603805c3d6ece7ac36.pub";
+    nas    = "${vars.userHomeDir}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/5ef1ef402650e42d997727607fafa2e5.pub";
+    router = "${vars.userHomeDir}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/5ac39e8ef66a4ce5e516a135d229ae95.pub";
+    github = "${vars.userHomeDir}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/dd13d0088ae44d603805c3d6ece7ac36.pub";
   };
-  # thisFlakePath = "${vars.userDataVolume}/Developer/nix-configs/configs";
-  vars' = vars // { inherit pubkeyPaths; };
-  extraSpecialArgs = specialArgs // { vars = vars'; };
 in
 {
 
-home-manager.sharedModules       = [ inputs.nixvim.homeManagerModules.nixvim ];
+home-manager.sharedModules       = [ inputs.nixvim.homeModules.nixvim ];
+# home-manager.sharedModules       = [ inputs.nixvim.homeModules.nixvim  inputs.nix-search-tv.packages.x86_64-linux.default];
+# home-manager.sharedModules       = [ inputs.nixvim.homeModules.nixvim inputs.nix-search-tv.packages.${pkgs.system}.default];
 home-manager.useGlobalPkgs       = true;
 home-manager.useUserPackages     = true;
-home-manager.extraSpecialArgs    = builtins.trace extraSpecialArgs.vars extraSpecialArgs;
+home-manager.extraSpecialArgs    = specialArgs // { inherit inputs; };
 
 home-manager.users."${vars.username}" = { config, vars, ... }: {
-  # home.file                                  = { };
-  home          = {
-    packages      = pkgs.callPackage ../shared/home-manager.packages.nix { inherit pkgs; };
-    # homeDirectory = lib.mkForce userHomeDir;
-    stateVersion  = "25.05"; # @@ DO NOT MODIFY @@
-  };
+  home.packages = pkgs.callPackage ../shared/home-manager.packages.nix { inherit pkgs; };
+  home.stateVersion  = "25.05"; # @@ DO NOT MODIFY @@
   programs      = import ../shared/home-manager.programs.nix  { inherit pkgs config vars lib; };
 };
 

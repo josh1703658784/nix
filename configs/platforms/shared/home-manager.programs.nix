@@ -25,11 +25,9 @@ nixvim.enable         = true;
 direnv.enable         = true;
 docker-cli.enable     = false;
 git.enable            = true;
-# helix.enable          = true;
-# java.enable           = true;
 nnn.enable            = true;
 skim.enable           = true; # fuzzy search
-ssh.enable            = false;
+ssh.enable            = true;
 tmux.enable           = true;
 zsh.enable            = true;
 nh.enable             = true;
@@ -60,70 +58,40 @@ nixvim                  = {
   '';
 };
 
-# ssh            = {
-#   # see https://github.com/nix-community/home-manager/issues/7266
-#     # Host *
-#   # extraConfig    = ''
-#   #   IdentityAgent ~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
-#      # IdentityAgent "~/Library/Group Containers/group.strongbox.mac.mcguill/agent.sock"
-#   # '';
-#   # extraConfig    = ''
-#   #    IdentityAgent ~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
-#   # '';
-#   # controlMaster   = "auto";
-#   # controlPath     = "~/.ssh/sockets/%r@%h-%p";
-#   # controlPersist  = "10m";
-# 
-#   includes       = ["~/.orbstack/ssh/config"];
-#   matchBlocks    = {
-#     "codeberg.org" = {
-#       hostname       = "codeberg.org";
-#       user           = "git";
-#       identityFile   = vars.pubkeyPaths.codeberg;
-#     };
-#     "nas"          = {
-#       hostname       = "nas.stonecat-shark.ts.net";
-#       user           = "freon";
-#       identityFile   = vars.pubkeyPaths.nas;
-#    };
-#     "nas.local"    = {
-#       hostname       = "172.19.134.18";
-#       user           = "freon";
-#       identityFile   = vars.pubkeyPaths.nas;
-#     };
-#     "router"       = {
-#       hostname       = "172.19.134.33";
-#       port           = 33891;
-#       user           = "freon";
-#       identityFile   = vars.pubkeyPaths.router;
-#     };
-#     "github"       = {
-#       hostname       = "github.com";
-#       user           = "git";
-#       identityFile   = vars.pubkeyPaths.github;
-#     };
-#   };
-# };
+ssh = {
+  enableDefaultConfig   = false;
+  settings."*" = {
+    ForwardAgent        = false;
+    AddKeysToAgent      = "no";
+    Compression         = false;
+    ServerAliveInterval = 0;
+    ServerAliveCountMax = 3;
+    HashKnownHosts      = false;
+    UserKnownHostsFile  = "~/.ssh/known_hosts";
+    ControlMaster       = "no";
+    ControlPath         = "~/.ssh/master-%r@%n:%p";
+    ControlPersist      = "no";
+  };
+  settings."nas" = {
+    HostName = "nas.stonecat-shark.ts.net";
+    User = "freon";
+  };
+};
 
 # fuzzy finder: https://github.com/casonadams/skim.zsh
 skim = {
-  # integretations causes compdef completion issues due
-  # to nix-darwin not properly supporting multi-user installs
   enableZshIntegration = false;
 };
 
+diff-so-fancy.enable = true;
 git                  = {
   # https://search.nixos.org/options?channel=25.11&query=programs.git.config#show=option%253Aprograms.git.config
-  diff-so-fancy.enable = true;
   ignores              = [ ".secret" ".secrets" ".nocommit" ".ignore"];
   # https://docs.codeberg.org/git/configuring-git/
-  userName             = "josh_1752185424";
-  userEmail            = "josh_1752185424@noreply.codeberg.org";
-  extraConfig = {
-    push = {
-      autoSetupRemote = true;
-    };
-  };
+
+  settings.user.name             = "josh_1752185424";
+  settings.user.email            = "josh_1752185424@noreply.codeberg.org";
+  settings.extraConfig.push.autoSetupRemote = true;
 };
 
 direnv = {
@@ -146,8 +114,6 @@ tmux = {
   ];
 };
 
-# zsh.completionInit = "autoload -U compinit && compinit -i";
-# zsh.completionInit = "autoload -U compinit && compinit -u";
 zsh = {
   autocd = true;
   enableCompletion = false;
@@ -209,10 +175,9 @@ zsh = {
     g            = "git";
     ll           = "ls -la";
     l            = "ls -la";
-    switch       = "su - admin -c 'sudo /run/current-system/sw/bin/darwin-rebuild switch --flake \"${vars.userDataVolume}/Developer/nix-configs/configs\"'";
-    switch-v      = "su - admin -c 'sudo /run/current-system/sw/bin/darwin-rebuild switch --show-trace -vvvvv --show-trace --flake \"${vars.userDataVolume}/Developer/nix-configs/configs\"'";
+    switch       = "sudo nixos-rebuild switch --flake /home/josh/_DATA_/Developer/nix-configs/configs";
+    switch-v     = "sudo nixos-rebuild switch --show-trace -vvvv --flake /home/josh/_DATA_/Developer/nix-configs/configs";
     diff         = "ksdiff";
-    # tailscale    = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
     dcd          = "docker compose down";
     dce          = "docker-compose exec";
     dci          = "docker-compose-inspect";

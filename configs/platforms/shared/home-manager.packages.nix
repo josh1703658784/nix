@@ -25,7 +25,8 @@ with pkgs;
   # mackup
   meslo-lgs-nf
   nix-search-cli
-  nix-search-tv # https://github.com/3timeslazy/nix-search-tv
+  # nix-search-tv # https://github.com/3timeslazy/nix-search-tv
+  # inputs.nix-search-tv.packages.x86_64-linux.default
   nmap
   pwgen
   rclone
@@ -46,3 +47,4 @@ with pkgs;
   zsh-powerlevel10k
   # nur.repos.nagy.paperify
 ]
+
